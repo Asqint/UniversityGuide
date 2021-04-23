@@ -23,6 +23,9 @@ public class PageService {
     public void AddPage(Page page){
         pageRepository.save(page);
     }
-    
+
+    public void EditPage(Page page){
+        pageRepository.save(page);
+    }
 }
 
