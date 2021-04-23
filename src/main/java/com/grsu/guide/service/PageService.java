@@ -20,5 +20,9 @@ public class PageService {
         return pageRepository.findAll();
     }
 
+    public void AddPage(Page page){
+        pageRepository.save(page);
+    }
+    
 }
 
