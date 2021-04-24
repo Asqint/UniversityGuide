@@ -1,6 +1,9 @@
 package com.grsu.guide.service;
 
+import com.grsu.guide.domain.Audio;
 import com.grsu.guide.domain.Page;
+import com.grsu.guide.domain.Text;
+import com.grsu.guide.domain.Video;
 import com.grsu.guide.repository.PageRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,31 @@ public class PageService {
     }
 
     public void AddPage(Page page){
+
+        if(page.getTexts()!= null) {
+            for (Text newText : page.getTexts()) {
+                newText.setPage(page);
+                page.getTexts().add(newText);
+            }
+            page.setTexts(page.getTexts());
+        }
+
+        if(page.getVideos()!=null) {
+            for (Video newVideo : page.getVideos()) {
+                newVideo.setPage(page);
+                page.getVideos().add(newVideo);
+            }
+            page.setVideos(page.getVideos());
+        }
+
+        if(page.getAudios()!=null) {
+            for (Audio newAudio : page.getAudios()) {
+                newAudio.setPage(page);
+                page.getAudios().add(newAudio);
+            }
+            page.setAudios(page.getAudios());
+        }
+
         pageRepository.save(page);
     }
 
