@@ -3,6 +3,7 @@ package com.grsu.guide.domain;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
@@ -17,6 +18,7 @@ public class Audio {
     @Column(name="audio")
     private String audio;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = CascadeType.ALL)
     private Page page;
 

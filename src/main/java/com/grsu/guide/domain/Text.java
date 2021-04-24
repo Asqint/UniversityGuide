@@ -2,6 +2,7 @@ package com.grsu.guide.domain;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -17,6 +18,7 @@ public class Text {
     @Column(name="text")
     private String text;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = CascadeType.ALL)
     private Page page;
 
