@@ -55,5 +55,10 @@ public class PageService {
     public void EditPage(Page page){
         pageRepository.save(page);
     }
+
+    public void DeletePage(Page page){
+        pageRepository.deleteById(page.getId());
+    }
+
 }
 
