@@ -28,4 +28,19 @@ public class PageController {
         model.addAttribute("pages", pages);
         return "main";
     }
+
+
+    @PostMapping("/{namePage}")
+    public String AddElement(@RequestParam(required=false) String value,String type, @PathVariable String namePage,
+                          Model model){
+        Page page = pageService.GetPage(namePage);
+        Element element = new Element(type,value);
+        List<Element> elements = new ArrayList<>();
+        elements.add(element);
+        page.setElements(elements);
+        pageService.AddPage(page);
+        return "redirect:/{namePage}";
+    }
+
+
 }
