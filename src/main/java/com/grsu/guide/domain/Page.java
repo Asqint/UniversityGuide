@@ -4,7 +4,11 @@ package com.grsu.guide.domain;
 import javax.persistence.*;
 import lombok.Data;
 import com.sun.istack.NotNull;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -16,30 +20,20 @@ public class Page {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name="namePage")
+    @Column(name="name_page")
     private String namePage;
 
-    @Column(name="head")
-    private String head;
+    @EqualsAndHashCode.Exclude
+    @Column(name="element")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name = "page_id")
+    private List<Element> elements;
 
-    @Column(name="texts")
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<Text> texts;
 
-    @Column(name="audios")
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<Audio> audios;
-
-    @Column(name="videos")
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<Video> videos;
-
-    public Page(String head, Set<Text> texts, Set<Audio> audios, Set<Video> videos, String namePage){
-        this.head = head;
-        this.texts = texts;
-        this.audios = audios;
-        this.videos = videos;
+    public Page(String namePage, List<Element> elements){
         this.namePage = namePage;
+        this.elements = elements;
     }
 
     public Page() {}
