@@ -29,6 +29,10 @@ public class PageService {
         pageRepository.save(page);
     }
 
+    public void DeletePage(String namePage){
+        pageRepository.deleteById(GetPage(namePage).getId());
+    }
+
 
 }
 
