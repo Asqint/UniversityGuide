@@ -1,5 +1,6 @@
 package com.grsu.guide.service;
 
+import com.grsu.guide.domain.Element;
 import com.grsu.guide.domain.Page;
 import com.grsu.guide.repository.PageRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,13 @@ public class PageService {
     }
 
     public void AddPage(Page page){
+
+        if(page.getElements()!=null) {
+            for (Element newElement : page.getElements()) {
+                page.getElements().add(newElement);
+            }
+            page.setElements(page.getElements());
+        }
 
         pageRepository.save(page);
     }
