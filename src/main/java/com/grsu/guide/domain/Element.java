@@ -16,7 +16,7 @@ public class Element {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "value")
+    @Column(name = "value",length = 2048)
     private String value;
 
     public Element(String type,String value){
