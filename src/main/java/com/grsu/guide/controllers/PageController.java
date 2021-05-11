@@ -151,7 +151,14 @@ public class PageController {
         return "redirect:/{namePage}";
     }
 
-    @PostMapping("/Feedback")
+    @GetMapping("/feedback")
+    public String GetFeedback(Model model) {
+        List<Page> pages = (List<Page>) pageService.GetAllPages();
+        model.addAttribute("pages", pages);
+        return "feedback";
+    }
+
+    @PostMapping("/feedback")
     public String Feedback(@RequestParam(required = false) String name,
                            @RequestParam(required = false) String mail,
                            @RequestParam(required = false) String message){
@@ -163,7 +170,7 @@ public class PageController {
 
         );
         mailSender.send("Feedback", messageTo);
-        return "redirect:/FeedBack";
+        return "redirect:/";
     }
 
 
