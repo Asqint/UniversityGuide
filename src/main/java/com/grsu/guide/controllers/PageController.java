@@ -18,13 +18,24 @@ import java.util.*;
 @Controller
 public class PageController {
 
+    private final SmtpMailSender mailSender;
     private final PageService pageService;
+    private final ElementService elementService;
 
     @Autowired
-    public PageController(PageService pageService){
+    public PageController(SmtpMailSender mailSender, PageService pageService, ElementService elementService){
+        this.mailSender = mailSender;
         this.pageService = pageService;
+        this.elementService = elementService;
     }
 
+    @Value("${upload.path}")
+    private String uploadPath;
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
 
     @GetMapping("/")
         public String main( Model model){
@@ -85,4 +96,23 @@ public class PageController {
         pageService.AddPage(page);
         return "redirect:/{namePage}";
     }
+
+
+
+    @PostMapping("/Feedback")
+    public String Feedback(@RequestParam(required = false) String name,
+                           @RequestParam(required = false) String mail,
+                           @RequestParam(required = false) String message){
+        String messageTo = String.format(
+                "Email: %s \n" +
+                        "Name: %s \n" +
+                       "%s",
+                mail,name,message
+
+        );
+        mailSender.send("Feedback", messageTo);
+        return "redirect:/FeedBack";
+    }
+
+
 }
