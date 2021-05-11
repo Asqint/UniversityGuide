@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="">
 <head>
-    <title>Home</title>
+    <title>GRSU Guide</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -12,7 +12,7 @@
 </head>
 <body>
 <ul class="nav nav-pills nav-justified">
-    <a class="logo" href="/">
+    <a class="logo" th:href="@{'/'+ ${pages[0].getNamePage()}}">
         <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
     </a>
     <li class="nav-item"  th:each="str:${pages}">
@@ -25,12 +25,12 @@
         <div class="col">
         </div>
         <div class="col-xl">
-            <h1 style="text-align: center;margin: 0" class="display-4" th:value="${page.getNamePage()}">Страница</h1>
+            <h1 style="text-align: center;margin: 0" class="display-4" th:text="${page.getNamePage()}"></h1>
         </div>
         <div class="col">
         </div>
     </div>
-    <div class="row justify-content-md-center" th:each="element:${page.getElements()}">
+    <div class="row justify-content-md-center" th:each="element:${elements}">
         <div class="col">
         </div>
         <div class="col-xl">
@@ -59,7 +59,7 @@
                 <div id="content-2">
                     <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
                         <label for="formFile1" class="form-label">Выберите видео</label>
-                        <input class="form-control" type="file" id="formFile1" name="file">
+                        <input class="form-control" type="file" accept="video/*" id="formFile1" name="file">
                         <input type="hidden" id="type2" name="type" value="video">
                         <input class="add-button" type="submit" value="Добавить">
                     </form>
@@ -67,7 +67,7 @@
                 <div id="content-3">
                     <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
                         <label for="formFile2" class="form-label">Выберите картинку</label>
-                        <input class="form-control" name="file" type="file" id="formFile2">
+                        <input class="form-control" accept="image/*" name="file" type="file" id="formFile2">
                         <input type="hidden" id="type3" name="type" value="image">
                         <input class="add-button" type="submit" value="Добавить">
                     </form>
