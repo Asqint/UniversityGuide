@@ -109,16 +109,28 @@ public class PageController {
         return "redirect:/{newNamePage}";
     }
 
-    @PostMapping("/{namePage}/edit_el")
-    public String EditElement(@RequestParam(required = false) Long id,
+    @PostMapping("/{namePage}/edit_el/{id}")
+    public String EditElement(@PathVariable Long id,
                               @RequestParam(required = false) String type,
                               @RequestParam(required = false) String value,
                               @PathVariable String namePage,
-                              @RequestParam("file") MultipartFile file){
+                              @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Page page = pageService.GetPage(namePage);
+
         Optional<Element> optionalElement = elementService.GetElement(id);
-        optionalElement.get().setType(type);
-        optionalElement.get().setValue(value);
+        if(file !=null && !file.getOriginalFilename().isEmpty()){
+            optionalElement.get().setValue(elementService.UploadElement(file,uploadPath));
+        }
+        else{
+            if(type.equals("text")) {
+                optionalElement.get().setType(type);
+                optionalElement.get().setValue(value);
+            }
+            else
+            {
+                return "redirect:/{namePage}";
+            }
+        }
         Element element = optionalElement.get();
         Set<Element> elements = page.getElements();
         elements.add(element);
@@ -133,8 +145,8 @@ public class PageController {
         return "redirect:/";
     }
 
-    @PostMapping("/{namePage}/delete_el")
-    public String DeleteElement(@RequestParam(required = false) Long id, @PathVariable String namePage){
+    @PostMapping("/{namePage}/delete_el/{id}")
+    public String DeleteElement(@PathVariable String namePage, @PathVariable Long id){
         elementService.DeleteElement(id);
         return "redirect:/{namePage}";
     }
