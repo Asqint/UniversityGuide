@@ -25,6 +25,18 @@ public class PageController {
         this.pageService = pageService;
     }
 
+
+    @GetMapping("/")
+        public String main( Model model){
+        List<Page> pages = (List<Page>) pageService.GetAllPages();
+        List <Element> sortedList = new ArrayList<>(pages.get(0).getElements());
+        sortedList.sort(Comparator.comparing(Element::getId));
+        model.addAttribute("elements",sortedList);
+        model.addAttribute("pages", pages);
+        model.addAttribute("page", pages.get(0));
+        return "home";
+    }
+
     @GetMapping("/{namePage}")
         public String GetPage(@PathVariable(value = "namePage") String namePage, Model model){
        Page page = pageService.GetPage(namePage);
