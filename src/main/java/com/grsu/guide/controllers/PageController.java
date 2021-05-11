@@ -109,7 +109,23 @@ public class PageController {
         return "redirect:/{newNamePage}";
     }
 
-   
+    @PostMapping("/{namePage}/edit_el")
+    public String EditElement(@RequestParam(required = false) Long id,
+                              @RequestParam(required = false) String type,
+                              @RequestParam(required = false) String value,
+                              @PathVariable String namePage,
+                              @RequestParam("file") MultipartFile file){
+        Page page = pageService.GetPage(namePage);
+        Optional<Element> optionalElement = elementService.GetElement(id);
+        optionalElement.get().setType(type);
+        optionalElement.get().setValue(value);
+        Element element = optionalElement.get();
+        Set<Element> elements = page.getElements();
+        elements.add(element);
+        page.setElements(elements);
+        pageService.AddPage(page);
+        return "redirect:/{namePage}";
+    }
 
     @GetMapping("/{namePage}/delete")
     public String DeletePage(@PathVariable String namePage){
