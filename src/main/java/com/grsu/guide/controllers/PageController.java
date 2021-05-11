@@ -101,6 +101,17 @@ public class PageController {
     }
 
 
+    @GetMapping("/{namePage}/delete")
+    public String DeletePage(@PathVariable String namePage){
+        pageService.DeletePage(namePage);
+        return "redirect:/";
+    }
+
+    @PostMapping("/{namePage}/delete_el")
+    public String DeleteElement(@RequestParam(required = false) Long id, @PathVariable String namePage){
+        elementService.DeleteElement(id);
+        return "redirect:/{namePage}";
+    }
 
     @PostMapping("/Feedback")
     public String Feedback(@RequestParam(required = false) String name,
