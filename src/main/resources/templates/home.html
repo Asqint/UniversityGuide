@@ -12,60 +12,108 @@
 </head>
 <body>
 <ul class="nav nav-pills nav-justified">
-    <a class="logo" th:href="@{'/'+ ${pages[0].getNamePage()}}">
+    <a class="logo" href="/">
         <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
     </a>
-    <li class="nav-item"  th:each="str:${pages}">
-        <a th:href="@{'/'+ ${str.getNamePage()}}" class="nav-link nav-link-add" th:text="${str.getNamePage()}">LINK</a>
+    <li class="nav-item" th:each="pageN:${pages}">
+        <a th:href="@{'/'+ ${pageN.getNamePage()}}" class="nav-link nav-link-add" th:text="${pageN.getNamePage()}">Страница</a>
     </li>
-
+    <!-- <li class="nav-item">
+        <a class="nav-link nav-link-add dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
+            Dropdown link
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </li> -->
 </ul>
-<div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col">
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col">
+            </div>
+            <div class="col-xl">
+                <h1 style="text-align: center;margin: 0" class="display-4" th:value="${page.getNamePage()}">Страница</h1>
+            </div>
+            <div class="col">
+            </div>
         </div>
-        <div class="col-xl">
-            <h1 style="text-align: center;margin: 0" class="display-4" th:text="${page.getNamePage()}"></h1>
-        </div>
-        <div class="col">
-        </div>
-    </div>
-    <div class="row justify-content-md-center" th:each="element:${elements}">
-        <div class="col">
-        </div>
-        <div class="col-xl">
-            <video width="700px" class="element" muted="muted" controls loop th:if="${element.getType()=='video'}">
-                <source th:src="${'uploads/' + element.value}" type="video/mp4">
-            </video>
-            <img width="700px" class="element"  th:src="${'uploads/' + element.value}" th:if="${element.getType()=='image'}">
-            <p class="fs-5 element" th:text="${element.value}" th:if="${element.getType()=='text'}">
-        </div>
-        <div class="col">
-        </div>
-    </div>
-    <div class="row justify-content-md-center">
-        <div class="col">
-        </div>
-        <div class="col-xl add">
-            <div class="tabs" sec:authorize="hasRole('ROLE_ADMIN')">
-                <div id="content-1">
-                    <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
-                        <label for="textInput" class="form-label">Введите текст</label>
-                        <textarea class="form-control" name="value" id="textInput" rows="3"></textarea>
-                        <input type="hidden" id="type1" name="type" value="text">
-                        <input class="add-button" type="submit" value="Добавить">
-                    </form>
+        <div class="row justify-content-md-center" th:each="element, stat:${page.getElements()}">
+            <div class="col">
+            </div>
+            <div class="col-xl">
+                <video width="700px" class="element" muted="muted" controls loop th:if="${element.getType()=='video'}">
+                    <source th:src="${'uploads/' + element.value}" type="video/mp4">
+                </video>
+                <img width="700px" class="element"  th:src="${'uploads/' + element.value}" th:if="${element.getType()=='image'}">
+                <p class="fs-5 element" th:text="${element.value}" th:if="${element.getType()=='text'}"></p>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
+                    Edit
+                </button>
+
+                <div class="collapse" th:id="'collapseEdit'+${stat.index}">
+                    <div class="card card-body">
+                        <div class="tabs" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div id="content-1-edit">
+                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+                                    <label for="textInput" class="form-label">Введите текст</label>
+                                    <textarea class="form-control" name="value" id="textInput-edit" rows="3"></textarea>
+                                    <input type="hidden" id="type1-edit" name="type" value="text">
+                                    <input class="add-button" type="submit" value="Добавить">
+                                </form>
+                            </div>
+                            <div id="content-2-edit">
+                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+                                    <label for="formFile1" class="form-label">Выберите видео</label>
+                                    <input class="form-control" type="file" accept="video/*" id="formFile1-edit" name="file">
+                                    <input type="hidden" id="type2-edit" name="type" value="video">
+                                    <input class="add-button" type="submit" value="Добавить">
+                                </form>
+                            </div>
+                            <div id="content-3-edit">
+                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+                                    <label for="formFile2" class="form-label">Выберите картинку</label>
+                                    <input class="form-control" accept="image/*" name="file" type="file" id="formFile2-edit">
+                                    <input type="hidden" id="type3-edit" name="type" value="image">
+                                    <input class="add-button" type="submit" value="Добавить">
+                                </form>
+                            </div>
+
+                            <div class="tabs__links">
+                                <a href="#content-1">Добавить текст</a>
+                                <a href="#content-2">Добавить видео</a>
+                                <a href="#content-3">Добавить картинку</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="content-2">
-                    <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
-                        <label for="formFile1" class="form-label">Выберите видео</label>
-                        <input class="form-control" type="file" accept="video/*" id="formFile1" name="file">
-                        <input type="hidden" id="type2" name="type" value="video">
-                        <input class="add-button" type="submit" value="Добавить">
-                    </form>
-                </div>
-                <div id="content-3">
-                    <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+            </div>
+            <div class="col">
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col">
+            </div>
+            <div class="col-xl add">
+                <div class="tabs">
+                    <div id="content-1">
+                        <form method="post">
+                            <label for="textInput" class="form-label">Введите текст</label>
+                            <textarea class="form-control" id="textInput" rows="3"></textarea>
+                            <input type="hidden" id="type1" name="type" value="text">
+                            <input class="add-button" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                    <div id="content-2">
+                        <form>
+                            <label for="formFile1" class="form-label">Выберите видео</label>
+                            <input class="form-control" type="file" id="formFile1" name="video">
+                            <input type="hidden" id="type2" name="type" value="video">
+                            <input class="add-button" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                    <div id="content-3">
                         <label for="formFile2" class="form-label">Выберите картинку</label>
                         <input class="form-control" accept="image/*" name="file" type="file" id="formFile2">
                         <input type="hidden" id="type3" name="type" value="image">
