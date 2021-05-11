@@ -46,6 +46,17 @@ public class PageController {
         return "main";
     }
 
+
+    @PostMapping("/{namePage}/add")
+    public String AddPage(@RequestParam(required = false) String newNamePage,
+                          @PathVariable String namePage){
+        Page page = new Page();
+        page.setNamePage(newNamePage);
+        pageService.AddPage(page);
+        return "redirect:/{newNamePage}";
+    }
+
+
     @PostMapping("/{namePage}/add_el")
     public String AddElement(@RequestParam(required=false) String value,
                              @RequestParam(required=false) String type,
