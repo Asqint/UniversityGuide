@@ -2,12 +2,17 @@ package com.grsu.guide.controllers;
 
 import com.grsu.guide.domain.Element;
 import com.grsu.guide.domain.Page;
+import com.grsu.guide.service.ElementService;
 import com.grsu.guide.service.PageService;
+import com.grsu.guide.service.SmtpMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -29,18 +34,32 @@ public class PageController {
         return "main";
     }
 
-
-    @PostMapping("/{namePage}")
-    public String AddElement(@RequestParam(required=false) String value,String type, @PathVariable String namePage,
-                          Model model){
+    @PostMapping("/{namePage}/add_el")
+    public String AddElement(@RequestParam(required=false) String value,
+                             @RequestParam(required=false) String type,
+                             @PathVariable String namePage,
+                             @RequestParam(value = "file", required = false) MultipartFile file
+                             ) throws IOException {
         Page page = pageService.GetPage(namePage);
-        Element element = new Element(type,value);
-        List<Element> elements = new ArrayList<>();
+        Element element = new Element();
+
+        if(file !=null && !file.getOriginalFilename().isEmpty()){
+             element.setValue(elementService.UploadElement(file,uploadPath));
+        }
+        else{
+            if(type.equals("text")) {
+                element.setValue(value);
+            }
+            else
+            {
+                return "redirect:/{namePage}";
+            }
+        }
+        element.setType(type);
+        Set<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
         pageService.AddPage(page);
         return "redirect:/{namePage}";
     }
-
-
 }
