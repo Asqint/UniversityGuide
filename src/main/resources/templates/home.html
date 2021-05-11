@@ -18,6 +18,9 @@
     <li class="nav-item" th:each="pageN:${pages}">
         <a th:href="@{'/'+ ${pageN.getNamePage()}}" class="nav-link nav-link-add" th:text="${pageN.getNamePage()}"></a>
     </li>
+    <li class="nav-item">
+        <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
+    </li>
     <!-- <li class="nav-item">
         <a class="nav-link nav-link-add dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
             Dropdown link
