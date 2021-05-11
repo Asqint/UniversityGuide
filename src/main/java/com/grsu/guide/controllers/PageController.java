@@ -49,12 +49,15 @@ public class PageController {
     }
 
     @GetMapping("/{namePage}")
-        public String GetPage(@PathVariable(value = "namePage") String namePage, Model model){
-       Page page = pageService.GetPage(namePage);
-       List<Page> pages = (List<Page>) pageService.GetAllPages();
-        model.addAttribute("page", page);
+    public String GetPage(@PathVariable String namePage, Model model){
+        Page page = pageService.GetPage(namePage);
+        List<Page> pages = (List<Page>) pageService.GetAllPages();
+        List <Element> sortedList = new ArrayList<>(page.getElements());
+        sortedList.sort(Comparator.comparing(Element::getId));
+        model.addAttribute("elements",sortedList );
         model.addAttribute("pages", pages);
-        return "main";
+        model.addAttribute("page", page);
+        return "home";
     }
 
 
