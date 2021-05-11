@@ -100,6 +100,16 @@ public class PageController {
         return "redirect:/{namePage}";
     }
 
+    @PostMapping("/{namePage}/edit")
+    public String EditPage(@RequestParam(required = false) String newNamePage,
+                           @PathVariable String namePage){
+        Page page = pageService.GetPage(namePage);
+        page.setNamePage(newNamePage);
+        pageService.AddPage(page);
+        return "redirect:/{newNamePage}";
+    }
+
+   
 
     @GetMapping("/{namePage}/delete")
     public String DeletePage(@PathVariable String namePage){
