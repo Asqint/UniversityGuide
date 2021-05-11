@@ -61,13 +61,12 @@ public class PageController {
     }
 
 
-    @PostMapping("/{namePage}/add")
-    public String AddPage(@RequestParam(required = false) String newNamePage,
-                          @PathVariable String namePage){
+    @PostMapping("/add")
+    public String AddPage(@RequestParam(required = false) String newNamePage){
         Page page = new Page();
         page.setNamePage(newNamePage);
         pageService.AddPage(page);
-        return "redirect:/{newNamePage}";
+        return "redirect:/";
     }
 
 
@@ -106,7 +105,7 @@ public class PageController {
         Page page = pageService.GetPage(namePage);
         page.setNamePage(newNamePage);
         pageService.AddPage(page);
-        return "redirect:/{newNamePage}";
+        return "redirect:/";
     }
 
     @PostMapping("/{namePage}/edit_el/{id}")
@@ -139,7 +138,7 @@ public class PageController {
         return "redirect:/{namePage}";
     }
 
-    @GetMapping("/{namePage}/delete")
+    @PostMapping("/{namePage}/delete")
     public String DeletePage(@PathVariable String namePage){
         pageService.DeletePage(namePage);
         return "redirect:/";

@@ -21,7 +21,30 @@
     <li class="nav-item">
         <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
     </li>
+    <button style="margin-top: 30px;margin-bottom: 30px" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addModal" sec:authorize="hasRole('ROLE_ADMIN')">
+        Add page
+    </button>
 </ul>
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/add}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Add page</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="pageNameInput" class="form-label">Page name</label>
+                    <input type="text" name="newNamePage" class="form-control" id="pageNameInput" placeholder="Page Name">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="feedback">
 
     <form th:action="@{/feedback}" method="post">

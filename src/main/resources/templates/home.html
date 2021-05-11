@@ -21,6 +21,9 @@
     <li class="nav-item">
         <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
     </li>
+    <button style="margin-top: 30px;margin-bottom: 30px" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addModal" sec:authorize="hasRole('ROLE_ADMIN')">
+        Add page
+    </button>
     <!-- <li class="nav-item">
         <a class="nav-link nav-link-add dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
             Dropdown link
@@ -32,6 +35,26 @@
         </ul>
     </li> -->
 </ul>
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/add}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Add page</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="pageNameInput" class="form-label">Page name</label>
+                    <input type="text" name="newNamePage" class="form-control" id="pageNameInput" placeholder="Page Name">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="col">
@@ -40,6 +63,32 @@
                 <h1 style="text-align: center;margin: 0" class="display-4" th:text="${page.getNamePage()}"></h1>
             </div>
             <div class="col">
+                <button style="margin-top: 30px" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#editModal" sec:authorize="hasRole('ROLE_ADMIN')">
+                    Edit page
+                </button>
+                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form th:action="@{'/'+${page.getNamePage()}+'/edit'}" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editModalLabel">Rename page</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="pageNameInput" class="form-label">Page name</label>
+                                    <input type="text" name="newNamePage" class="form-control" id="pageNameEdit" placeholder="Page Name">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                            <form th:action="@{'/'+${page.getNamePage()}+'/delete/'}" method="post">
+                                <button type="submit" class="btn btn-danger">Delete page</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row justify-content-md-center" th:each="element, stat:${elements}">
