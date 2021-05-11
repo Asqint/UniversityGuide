@@ -12,11 +12,11 @@
 </head>
 <body>
 <ul class="nav nav-pills nav-justified">
-    <a class="logo" href="/">
+    <a class="logo" th:href="@{'/'+ ${pages[0].getNamePage()}}">
         <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
     </a>
     <li class="nav-item" th:each="pageN:${pages}">
-        <a th:href="@{'/'+ ${pageN.getNamePage()}}" class="nav-link nav-link-add" th:text="${pageN.getNamePage()}">Страница</a>
+        <a th:href="@{'/'+ ${pageN.getNamePage()}}" class="nav-link nav-link-add" th:text="${pageN.getNamePage()}"></a>
     </li>
     <!-- <li class="nav-item">
         <a class="nav-link nav-link-add dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
@@ -34,12 +34,12 @@
             <div class="col">
             </div>
             <div class="col-xl">
-                <h1 style="text-align: center;margin: 0" class="display-4" th:value="${page.getNamePage()}">Страница</h1>
+                <h1 style="text-align: center;margin: 0" class="display-4" th:text="${page.getNamePage()}"></h1>
             </div>
             <div class="col">
             </div>
         </div>
-        <div class="row justify-content-md-center" th:each="element, stat:${page.getElements()}">
+        <div class="row justify-content-md-center" th:each="element, stat:${elements}">
             <div class="col">
             </div>
             <div class="col-xl">
@@ -48,15 +48,15 @@
                 </video>
                 <img width="700px" class="element"  th:src="${'uploads/' + element.value}" th:if="${element.getType()=='image'}">
                 <p class="fs-5 element" th:text="${element.value}" th:if="${element.getType()=='text'}"></p>
-                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
+                <button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
                     Edit
                 </button>
 
-                <div class="collapse" th:id="'collapseEdit'+${stat.index}">
+                <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
                     <div class="card card-body">
-                        <div class="tabs" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="tabs">
                             <div id="content-1-edit">
-                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="textInput" class="form-label">Введите текст</label>
                                     <textarea class="form-control" name="value" id="textInput-edit" rows="3"></textarea>
                                     <input type="hidden" id="type1-edit" name="type" value="text">
@@ -64,7 +64,7 @@
                                 </form>
                             </div>
                             <div id="content-2-edit">
-                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="formFile1" class="form-label">Выберите видео</label>
                                     <input class="form-control" type="file" accept="video/*" id="formFile1-edit" name="file">
                                     <input type="hidden" id="type2-edit" name="type" value="video">
@@ -72,7 +72,7 @@
                                 </form>
                             </div>
                             <div id="content-3-edit">
-                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="formFile2" class="form-label">Выберите картинку</label>
                                     <input class="form-control" accept="image/*" name="file" type="file" id="formFile2-edit">
                                     <input type="hidden" id="type3-edit" name="type" value="image">
@@ -81,42 +81,46 @@
                             </div>
 
                             <div class="tabs__links">
-                                <a href="#content-1">Добавить текст</a>
-                                <a href="#content-2">Добавить видео</a>
-                                <a href="#content-3">Добавить картинку</a>
+                                <a href="#content-1-edit">Добавить текст</a>
+                                <a href="#content-2-edit">Добавить видео</a>
+                                <a href="#content-3-edit">Добавить картинку</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <form>
-                    <button style="margin-top: 30px" type="submit" class="btn btn-danger">Delete</button>
-                </form>
+            <div class="col" >
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <form th:action="@{'/'+ ${page.getNamePage()} +'/delete_el/' + ${element.getId()}}" method="post">
+                        <input type="hidden" th:id="${element.getId()}"/>
+                        <button style="margin-top: 30px"  type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="row justify-content-md-center">
+        <div class="row justify-content-md-center"  sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="col">
             </div>
             <div class="col-xl add">
                 <div class="tabs">
                     <div id="content-1">
-                        <form method="post">
+                        <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
                             <label for="textInput" class="form-label">Введите текст</label>
-                            <textarea class="form-control" id="textInput" rows="3"></textarea>
+                            <textarea class="form-control" name="value" id="textInput" rows="3"></textarea>
                             <input type="hidden" id="type1" name="type" value="text">
                             <input class="add-button" type="submit" value="Добавить">
                         </form>
                     </div>
                     <div id="content-2">
-                        <form>
+                        <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
                             <label for="formFile1" class="form-label">Выберите видео</label>
-                            <input class="form-control" type="file" id="formFile1" name="video">
+                            <input class="form-control" type="file" accept="video/*" id="formFile1" name="file">
                             <input type="hidden" id="type2" name="type" value="video">
                             <input class="add-button" type="submit" value="Добавить">
                         </form>
                     </div>
                     <div id="content-3">
+                    <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
                         <label for="formFile2" class="form-label">Выберите картинку</label>
                         <input class="form-control" accept="image/*" name="file" type="file" id="formFile2">
                         <input type="hidden" id="type3" name="type" value="image">
