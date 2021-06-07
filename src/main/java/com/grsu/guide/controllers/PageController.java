@@ -83,7 +83,7 @@ public class PageController {
              element.setValue(elementService.UploadElement(file,uploadPath));
         }
         else{
-            if(type.equals("text")) {
+            if(type.equals("text") && value!=null) {
                 element.setValue(value);
             }
             else
@@ -154,22 +154,28 @@ public class PageController {
     public String GetFeedback(Model model) {
         List<Page> pages = (List<Page>) pageService.GetAllPages();
         model.addAttribute("pages", pages);
+        model.addAttribute("isSent", false);
         return "feedback";
     }
+
 
     @PostMapping("/feedback")
     public String Feedback(@RequestParam(required = false) String name,
                            @RequestParam(required = false) String mail,
-                           @RequestParam(required = false) String message){
+                           @RequestParam(required = false) String message,
+                           Model model){
+        List<Page> pages = (List<Page>) pageService.GetAllPages();
+        model.addAttribute("pages", pages);
         String messageTo = String.format(
                 "Email: %s \n" +
                         "Name: %s \n" +
-                       "%s",
+                       "Message: %s",
                 mail,name,message
 
         );
         mailSender.send("Feedback", messageTo);
-        return "redirect:/";
+        model.addAttribute("isSent", true);
+        return "feedback";
     }
 
 
