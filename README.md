@@ -21,7 +21,7 @@ As an admin:
 - Home page as an admin
 ![img](https://i.postimg.cc/PxTFSD8Y/image.png)
 
-## Features
+## Getting started
 -	In order for the loading and saving of content to work correctly, you must specify the absolute path to the "uploads" folder in the application.properties file in the upload.path variable
 -	To log in as an administrator, you need to enter /login in the url, and to log out /logout (login: admin, pass: admin)
 
@@ -34,7 +34,7 @@ Main technologies we used:
 - Flyway
 - HTML
 - Maven
--CSS
+- CSS
 - Git
 
 ## Authors
