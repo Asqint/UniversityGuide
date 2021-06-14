@@ -1,0 +1,1 @@
+insert into page (id, name_page) values(0,'Home');
