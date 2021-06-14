@@ -5,6 +5,7 @@ import com.grsu.guide.domain.Page;
 import com.grsu.guide.service.ElementService;
 import com.grsu.guide.service.PageService;
 import com.grsu.guide.service.SmtpMailSender;
+import com.grsu.guide.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,15 +22,18 @@ public class PageController {
     private final SmtpMailSender mailSender;
     private final PageService pageService;
     private final ElementService elementService;
+    private final UserService userService;
 
     @Autowired
-    public PageController(SmtpMailSender mailSender, PageService pageService, ElementService elementService){
+    public PageController(SmtpMailSender mailSender, PageService pageService, ElementService elementService, UserService userService){
         this.mailSender = mailSender;
         this.pageService = pageService;
         this.elementService = elementService;
+        this.userService = userService;
     }
 
-    @Value("${upload.path}")
+
+    @Value("${app.upload.dir:${user.home}}")
     private String uploadPath;
 
     @GetMapping("/login")
@@ -173,6 +177,7 @@ public class PageController {
                 mail,name,message
 
         );
+        userService.Message(name,mail,message);
         mailSender.send("Feedback", messageTo);
         model.addAttribute("isSent", true);
         return "feedback";
