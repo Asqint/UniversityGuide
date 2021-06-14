@@ -107,7 +107,7 @@
                 <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
                     <div class="card card-body">
                         <div class="tabs">
-                            <div id="content-1-edit">
+                            <div th:id="'content-1-edit'+${stat.index}">
                                 <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="textInput" class="form-label">Введите текст</label>
                                     <textarea class="form-control" name="value" id="textInput-edit" rows="3"></textarea>
@@ -115,7 +115,7 @@
                                     <input class="add-button" type="submit" value="Добавить">
                                 </form>
                             </div>
-                            <div id="content-2-edit">
+                            <div th:id="'content-2-edit'+${stat.index}">
                                 <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="formFile1" class="form-label">Выберите видео</label>
                                     <input class="form-control" type="file" accept="video/*" id="formFile1-edit" name="file">
@@ -123,7 +123,7 @@
                                     <input class="add-button" type="submit" value="Добавить">
                                 </form>
                             </div>
-                            <div id="content-3-edit">
+                            <div th:id="'content-3-edit'+${stat.index}">
                                 <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="formFile2" class="form-label">Выберите картинку</label>
                                     <input class="form-control" accept="image/*" name="file" type="file" id="formFile2-edit">
@@ -133,9 +133,9 @@
                             </div>
 
                             <div class="tabs__links">
-                                <a href="#content-1-edit">Добавить текст</a>
-                                <a href="#content-2-edit">Добавить видео</a>
-                                <a href="#content-3-edit">Добавить картинку</a>
+                                <a th:href="'#content-1-edit'+${stat.index}">Добавить текст</a>
+                                <a th:href="'#content-2-edit'+${stat.index}">Добавить видео</a>
+                                <a th:href="'#content-3-edit'+${stat.index}">Добавить картинку</a>
                             </div>
                         </div>
                     </div>
