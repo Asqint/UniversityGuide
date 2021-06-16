@@ -11,51 +11,81 @@
     <link th:href="@{css/style.css}" rel='stylesheet'>
 </head>
 <body>
-<ul class="nav nav-pills nav-justified">
-    <a class="logo" th:href="@{'/'+ ${pages[0].getNamePage()}}">
-        <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
-    </a>
-    <li class="nav-item" th:each="pageN:${pages}">
-        <a th:href="@{'/'+ ${pageN.getNamePage()}}" class="nav-link nav-link-add" th:text="${pageN.getNamePage()}"></a>
-    </li>
-    <li class="nav-item">
-        <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
-    </li>
-    <button style="margin-top: 30px;margin-bottom: 30px" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addModal" sec:authorize="hasRole('ROLE_ADMIN')">
-        Add page
-    </button>
-    <!-- <li class="nav-item">
-        <a class="nav-link nav-link-add dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
-            Dropdown link
+
+    <!--NAVBAR-->
+    <ul class="nav nav-pills nav-justified">
+        <a class="logo" th:href="@{'/'+ ${pages[0].getNamePage()}}">
+            <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
         </a>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-    </li> -->
-</ul>
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form th:action="@{/add}" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add page</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <label for="pageNameInput" class="form-label">Page name</label>
-                    <input type="text" required name="newNamePage" class="form-control" id="pageNameInput" placeholder="Page Name">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
+        <li class="nav-item" th:each="pageN:${pages}">
+            <a th:href="@{'/'+ ${pageN.getNamePage()}}" class="nav-link nav-link-add " th:text="${pageN.getNamePage()}"></a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
+        </li>
+        <div class="nav-button-div">
+            <button type="button" class="nav-button" data-bs-toggle="modal" data-bs-target="#addModal" sec:authorize="hasRole('ROLE_ADMIN')">
+                Add page
+            </button>
+            <button type="button" class="nav-button" data-bs-toggle="modal" data-bs-target="#editModal" sec:authorize="hasRole('ROLE_ADMIN')">
+                Edit page
+            </button>
+        </div>
+        <div class="nav-button-div" sec:authorize="hasRole('ROLE_ADMIN')">
+            <button type="button" class="nav-button" sec:authorize="hasRole('ROLE_ADMIN')">
+                Logout
+            </button>
+        </div>
+    </ul>
+
+    <!--ADD PAGE MODAL-->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/add}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addModalLabel">Add page</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" required name="newNamePage" class="form-control" id="pageNameInput" placeholder="Page Name">
+                    </div>
+                    <div class="modal-buttons-div">
+                        <button type="submit" class="common_button">Save changes</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+
+    <!--EDIT PAGE MODAL-->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{'/'+${page.getNamePage()}+'/edit'}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Rename page</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" required name="newNamePage" class="form-control" th:value="${page.getNamePage()}" id="pageNameEdit" placeholder="Page Name">
+                    </div>
+                    <div class="modal-buttons-div">
+                        <button type="submit" class="common_button">Save changes</button>
+                    </div>
+                </form>
+                <div class="modal-buttons-div">
+                    <form th:action="@{'/'+${page.getNamePage()}+'/delete/'}" method="post">
+                        <button type="submit" class="common_button">Delete page</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--PAGE-->
     <div class="container">
+        <!--HEADER-->
         <div class="row justify-content-md-center">
             <div class="col">
             </div>
@@ -63,47 +93,27 @@
                 <h1 style="text-align: center;margin: 0" class="display-4" th:text="${page.getNamePage()}"></h1>
             </div>
             <div class="col">
-                <button style="margin-top: 30px" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#editModal" sec:authorize="hasRole('ROLE_ADMIN')">
-                    Edit page
-                </button>
-                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form th:action="@{'/'+${page.getNamePage()}+'/edit'}" method="post">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel">Rename page</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <label for="pageNameInput" class="form-label">Page name</label>
-                                    <input type="text" required name="newNamePage" class="form-control" id="pageNameEdit" placeholder="Page Name">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </form>
-                            <form th:action="@{'/'+${page.getNamePage()}+'/delete/'}" method="post">
-                                <button type="submit" class="btn btn-danger">Delete page</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="row justify-content-md-center" th:each="element, stat:${elements}">
             <div class="col">
             </div>
             <div class="col-xl">
+                <!--ELEMENTS-->
                 <video width="700px" class="element" muted="muted" controls loop th:if="${element.getType()=='video'}">
                     <source th:src="${'uploads/' + element.value}" type="video/mp4">
                 </video>
                 <img width="700px" class="element"  th:src="${'uploads/' + element.value}" th:if="${element.getType()=='image'}">
                 <p class="fs-5 element" th:text="${element.value}" th:if="${element.getType()=='text'}"></p>
-                <button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
-                    Edit
-                </button>
 
+                <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/'+ ${page.getNamePage()} +'/delete_el/' + ${element.getId()}}" method="post">
+                    <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
+                        Edit
+                    </button>
+                    <input type="hidden" th:id="${element.getId()}"/>
+                    <button type="submit" class="common_button">Delete</button>
+                </form>
+                <!--EDIT ELEMENT COLLAPSE-->
                 <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
                     <div class="card card-body">
                         <div class="tabs">
@@ -142,14 +152,9 @@
                 </div>
             </div>
             <div class="col" >
-                <div sec:authorize="hasRole('ROLE_ADMIN')">
-                    <form th:action="@{'/'+ ${page.getNamePage()} +'/delete_el/' + ${element.getId()}}" method="post">
-                        <input type="hidden" th:id="${element.getId()}"/>
-                        <button style="margin-top: 30px"  type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </div>
             </div>
         </div>
+        <!--ADD ELEMENT COLLAPSE-->
         <div class="row justify-content-md-center"  sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="col">
             </div>
@@ -186,14 +191,14 @@
                     <a href="#content-3">Добавить картинку</a>
                 </div>
             </div>
-        </div>
-        <div class="col">
+            </div>
+            <div class="col">
+            </div>
         </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-        crossorigin="anonymous">
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+            crossorigin="anonymous">
+    </script>
 </body>
 </html>

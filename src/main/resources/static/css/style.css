@@ -1,7 +1,6 @@
 .nav {
     background-color: #263796;
     height: 100px;
-    padding-right: 100px;
 }
 
 .nav-link-add {
@@ -11,6 +10,12 @@
     font-size: 30px;
     color: white;
     border-left-style: dashed;
+    transition:text-shadow 0.5s;
+}
+
+.nav-link-add:hover {
+    color:white;
+    text-shadow: #ffffff 1px 0 10px;
 }
 
 .logo {
@@ -104,19 +109,69 @@
     margin-left: 30%
 }
 
-.tab{
+.tab {
     width: 33%;
 }
 
-.edit_button{
+.edit_button {
     margin-top: 10px;
 }
 
-.delete{
+.delete {
     margin-bottom: 10px;
     margin-left: 372px;
+}
+
+.nav-button-div {
+    width: 90px;
+    margin-top: 8px;
+}
+
+.common_button {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+    background-color: white;
+    color: #263796;
+    border: 2px solid #263796;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+}
+
+.common_button:hover {
+    background-color: #263796;
+    color: white;
+    border: 2px solid white;
+}
+
+.nav-button {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+    background-color: #263796;
+    height: 32px;
+    width: 85px;
+    color: white;
+    border: 2px solid white;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+}
+
+.test_button:hover {
+    background-color: white;
+    color: #263796;
+    border: 2px solid #263796;
 }
 
 body {
     margin-bottom: 50px;
 }
+
+.modal-buttons-div {
+    margin-right:15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: flex-end;
+}
+
