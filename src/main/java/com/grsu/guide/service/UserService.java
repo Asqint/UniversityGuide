@@ -13,8 +13,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void Message(String userName, String email, String message){
-        User user = new User(userName,email,message);
+    public void saveUser(User user){
         userRepository.save(user);
     }
 }
