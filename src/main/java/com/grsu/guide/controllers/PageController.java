@@ -2,6 +2,7 @@ package com.grsu.guide.controllers;
 
 import com.grsu.guide.domain.Element;
 import com.grsu.guide.domain.Page;
+import com.grsu.guide.domain.User;
 import com.grsu.guide.service.ElementService;
 import com.grsu.guide.service.PageService;
 import com.grsu.guide.service.SmtpMailSender;
@@ -170,6 +171,9 @@ public class PageController {
                            Model model){
         List<Page> pages = (List<Page>) pageService.GetAllPages();
         model.addAttribute("pages", pages);
+
+        User user = new User(name, mail, message);
+
         String messageTo = String.format(
                 "Email: %s \n" +
                         "Name: %s \n" +
@@ -177,8 +181,10 @@ public class PageController {
                 mail,name,message
 
         );
-        userService.Message(name,mail,message);
+
+        userService.saveUser(user);
         mailSender.send("Feedback", messageTo);
+
         model.addAttribute("isSent", true);
         return "feedback";
     }
