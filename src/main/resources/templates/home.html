@@ -32,9 +32,11 @@
             </button>
         </div>
         <div class="nav-button-div" sec:authorize="hasRole('ROLE_ADMIN')">
-            <button type="button" class="nav-button" sec:authorize="hasRole('ROLE_ADMIN')">
-                Logout
-            </button>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="nav-button">
+                    Logout
+                </button>
+            </form>
         </div>
     </ul>
 
