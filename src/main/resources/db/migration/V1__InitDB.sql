@@ -4,7 +4,7 @@ create table element (
     id bigint not null,
     type varchar(255) not null,
     value varchar(2048) not null,
-    page_id bigint not null,
+    page_id bigint,
     primary key (id)
 );
 
