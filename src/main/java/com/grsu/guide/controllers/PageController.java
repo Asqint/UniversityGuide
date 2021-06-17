@@ -34,7 +34,7 @@ public class PageController {
     }
 
 
-    @Value("${app.upload.dir:${user.home}}")
+    @Value("${upload.path}")
     private String uploadPath;
 
     @GetMapping("/login")
@@ -124,6 +124,7 @@ public class PageController {
         Optional<Element> optionalElement = elementService.GetElement(id);
         if(file !=null && !file.getOriginalFilename().isEmpty()){
             optionalElement.get().setValue(elementService.UploadElement(file,uploadPath));
+            optionalElement.get().setType(type);
         }
         else{
             if(type.equals("text")) {
