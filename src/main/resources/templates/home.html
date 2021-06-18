@@ -101,12 +101,13 @@
             <div class="col">
             </div>
             <div class="col-xl">
-                <!--ELEMENTS-->
+                <!--ELEMENT-->
                 <video width="700px" class="element" muted="muted" controls loop th:if="${element.getType()=='video'}">
                     <source th:src="${'uploads/' + element.value}" type="video/mp4">
                 </video>
                 <img width="700px" class="element"  th:src="${'uploads/' + element.value}" th:if="${element.getType()=='image'}">
-                <p class="fs-5 element" th:text="${element.value}" th:if="${element.getType()=='text'}"></p>
+                <div class="element text" th:utext="${element.value}" th:if="${element.getType()=='text'}">
+                </div>
 
                 <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/'+ ${page.getNamePage()} +'/delete_el/' + ${element.getId()}}" method="post">
                     <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
@@ -121,33 +122,32 @@
                         <div class="tabs">
                             <div th:id="'content-1-edit'+${stat.index}">
                                 <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
-                                    <label for="textInput" class="form-label">Введите текст</label>
-                                    <textarea class="form-control" name="value" id="textInput-edit" rows="3"></textarea>
+                                    <textarea class="editor_txt" name="value" id="textInput-edit" rows="3"></textarea>
                                     <input type="hidden" id="type1-edit" name="type" value="text">
-                                    <input class="add-button" type="submit" value="Добавить">
+                                    <input class="common_button" type="submit" value="Add">
                                 </form>
                             </div>
                             <div th:id="'content-2-edit'+${stat.index}">
                                 <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
-                                    <label for="formFile1" class="form-label">Выберите видео</label>
+                                    <label for="formFile1" class="form-label">Select your video</label>
                                     <input class="form-control" type="file" accept="video/*" id="formFile1-edit" name="file">
                                     <input type="hidden" id="type2-edit" name="type" value="video">
-                                    <input class="add-button" type="submit" value="Добавить">
+                                    <input class="common_button" type="submit" value="Add">
                                 </form>
                             </div>
                             <div th:id="'content-3-edit'+${stat.index}">
                                 <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/edit_el/' + ${element.getId()}}" method="post">
-                                    <label for="formFile2" class="form-label">Выберите картинку</label>
+                                    <label for="formFile2" class="form-label">Select your image</label>
                                     <input class="form-control" accept="image/*" name="file" type="file" id="formFile2-edit">
                                     <input type="hidden" id="type3-edit" name="type" value="image">
-                                    <input class="add-button" type="submit" value="Добавить">
+                                    <input class="common_button" type="submit" value="Add">
                                 </form>
                             </div>
 
                             <div class="tabs__links">
-                                <a th:href="'#content-1-edit'+${stat.index}">Добавить текст</a>
-                                <a th:href="'#content-2-edit'+${stat.index}">Добавить видео</a>
-                                <a th:href="'#content-3-edit'+${stat.index}">Добавить картинку</a>
+                                <a th:href="'#content-1-edit'+${stat.index}">Add text</a>
+                                <a th:href="'#content-2-edit'+${stat.index}">Add video</a>
+                                <a th:href="'#content-3-edit'+${stat.index}">Add image</a>
                             </div>
                         </div>
                     </div>
@@ -158,49 +158,56 @@
         </div>
         <!--ADD ELEMENT COLLAPSE-->
         <div class="row justify-content-md-center"  sec:authorize="hasRole('ROLE_ADMIN')">
-            <div class="col">
-            </div>
             <div class="col-xl add">
                 <div class="tabs">
                     <div id="content-1">
                         <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
-                            <label for="textInput" class="form-label">Введите текст</label>
-                            <textarea class="form-control" name="value" id="textInput" rows="3"></textarea>
+                            <textarea class="editor_txt" name="value" id="textInput" rows="3"></textarea>
                             <input type="hidden" id="type1" name="type" value="text">
-                            <input class="add-button" type="submit" value="Добавить">
+                            <input class="common_button" type="submit" value="Add">
                         </form>
                     </div>
                     <div id="content-2">
                         <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
-                            <label for="formFile1" class="form-label">Выберите видео</label>
+                            <label for="formFile1" class="form-label">Select your video</label>
                             <input class="form-control" type="file" accept="video/*" id="formFile1" name="file">
                             <input type="hidden" id="type2" name="type" value="video">
-                            <input class="add-button" type="submit" value="Добавить">
+                            <input class="common_button" type="submit" value="Add">
                         </form>
                     </div>
                     <div id="content-3">
-                    <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
-                        <label for="formFile2" class="form-label">Выберите картинку</label>
-                        <input class="form-control" accept="image/*" name="file" type="file" id="formFile2">
-                        <input type="hidden" id="type3" name="type" value="image">
-                        <input class="add-button" type="submit" value="Добавить">
-                    </form>
-                </div>
+                        <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getNamePage()} +'/add_el'}" method="post">
+                            <label for="formFile2" class="form-label">Select your image</label>
+                            <input class="form-control" accept="image/*" name="file" type="file" id="formFile2">
+                            <input type="hidden" id="type3" name="type" value="image">
+                            <input class="common_button" type="submit" value="Add">
+                        </form>
+                    </div>
 
-                <div class="tabs__links">
-                    <a href="#content-1">Добавить текст</a>
-                    <a href="#content-2">Добавить видео</a>
-                    <a href="#content-3">Добавить картинку</a>
+                    <div class="tabs__links">
+                        <a href="#content-1">Add text</a>
+                        <a href="#content-2">Add video</a>
+                        <a href="#content-3">Add image</a>
+                    </div>
                 </div>
-            </div>
-            </div>
-            <div class="col">
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
             crossorigin="anonymous">
+    </script>
+    <script th:src="@{tinymce/tinymce.min.js}"></script>
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '.editor_txt',
+            menubar: false,
+            plugins: 'lists',
+            toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | fontselect fontsizeselect'
+
+
+        });
     </script>
 </body>
 </html>

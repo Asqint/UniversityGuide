@@ -1,9 +1,9 @@
-create sequence hibernate_sequence start with 10 increment by 1;
+create sequence hibernate_sequence start with 3 increment by 1;
 
 create table element (
     id bigint not null,
     type varchar(255) not null,
-    value varchar(2048) not null,
+    value varchar(max) not null,
     page_id bigint,
     primary key (id)
 );
