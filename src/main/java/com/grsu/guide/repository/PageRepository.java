@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PageRepository extends CrudRepository<Page,Long> {
-    Page findByNamePage(String namePage);
+    Page findByUrlPage(String urlPage);
 
 }
