@@ -1,13 +1,12 @@
 .nav {
     background-color: #263796;
-    height: 100px;
 }
 
 .nav-link-add {
     margin: 20px;
     padding: 10px;
     font-family: "Roboto", sans-serif;
-    font-size: 30px;
+    font-size: 20px;
     color: white;
     border-left-style: dashed;
     transition:text-shadow 0.5s;
