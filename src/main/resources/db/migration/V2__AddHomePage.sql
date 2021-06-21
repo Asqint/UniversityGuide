@@ -1,1 +1,1 @@
-insert into page (id, name_page) values(1,'Home');
+insert into page (id, url_page, name_page) values(1,'15d2f609-a9e0-4427-92b3-3da86af2f6ba','Home');
