@@ -13,8 +13,8 @@ public class PageService {
         this.pageRepository = pageRepository;
     }
 
-    public Page GetPage (String namePage){
-        return pageRepository.findByNamePage(namePage);
+    public Page GetPage (String urlPage){
+        return pageRepository.findByUrlPage(urlPage);
     }
 
     public Iterable<Page> GetAllPages(){
@@ -33,8 +33,8 @@ public class PageService {
         pageRepository.save(page);
     }
 
-    public void DeletePage(String namePage){
-        pageRepository.deleteById(GetPage(namePage).getId());
+    public void DeletePage(String urlPage){
+        pageRepository.deleteById(GetPage(urlPage).getId());
     }
 
 
