@@ -76,7 +76,7 @@
                         <button type="submit" class="common_button">Save changes</button>
                     </div>
                 </form>
-                <div class="modal-buttons-div">
+                <div th:if="${pages.size()>1}" class="modal-buttons-div">
                     <form th:action="@{'/'+${page.getUrlPage()}+'/delete/'}" method="post">
                         <button type="submit" class="common_button">Delete page</button>
                     </form>
