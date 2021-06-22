@@ -10,7 +10,6 @@ create table element (
 
 create table page (
     id bigint not null,
-    url_page varchar(255) not null,
     name_page varchar(255) not null,
     primary key (id)
 );
