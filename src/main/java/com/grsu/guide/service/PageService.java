@@ -13,15 +13,15 @@ public class PageService {
         this.pageRepository = pageRepository;
     }
 
-    public Page GetPage (String urlPage){
+    public Page getPage (String urlPage){
         return pageRepository.findByUrlPage(urlPage);
     }
 
-    public Iterable<Page> GetAllPages(){
+    public Iterable<Page> getAllPages(){
         return pageRepository.findAll();
     }
 
-    public void AddPage(Page page){
+    public void addPage(Page page){
 
         if(page.getElements()!=null) {
             for (Element newElement : page.getElements()) {
@@ -33,8 +33,8 @@ public class PageService {
         pageRepository.save(page);
     }
 
-    public void DeletePage(String urlPage){
-        pageRepository.deleteById(GetPage(urlPage).getId());
+    public void deletePage(String urlPage){
+        pageRepository.deleteById(getPage(urlPage).getId());
     }
 
 

@@ -44,7 +44,7 @@ public class PageController {
 
     @GetMapping("/")
         public String main( Model model){
-        List<Page> pages = (List<Page>) pageService.GetAllPages();
+        List<Page> pages = (List<Page>) pageService.getAllPages();
         List <Element> sortedList = new ArrayList<>(pages.get(0).getElements());
         sortedList.sort(Comparator.comparing(Element::getId));
         model.addAttribute("elements",sortedList);
@@ -54,9 +54,9 @@ public class PageController {
     }
 
     @GetMapping("/{urlPage}")
-    public String GetPage(@PathVariable String urlPage, Model model){
-        Page page = pageService.GetPage(urlPage);
-        List<Page> pages = (List<Page>) pageService.GetAllPages();
+    public String getPage(@PathVariable String urlPage, Model model){
+        Page page = pageService.getPage(urlPage);
+        List<Page> pages = (List<Page>) pageService.getAllPages();
         List <Element> sortedList = new ArrayList<>(page.getElements());
         sortedList.sort(Comparator.comparing(Element::getId));
         model.addAttribute("elements",sortedList );
@@ -67,26 +67,26 @@ public class PageController {
 
 
     @PostMapping("/add")
-    public String AddPage(@RequestParam(required = false) String newNamePage){
+    public String addPage(@RequestParam(required = false) String newNamePage){
         Page page = new Page();
         page.setNamePage(newNamePage);
         page.setUrlPage(UUID.randomUUID().toString());
-        pageService.AddPage(page);
+        pageService.addPage(page);
         return "redirect:/";
     }
 
 
     @PostMapping("/{urlPage}/add_el")
-    public String AddElement(@RequestParam(required=false) String value,
+    public String addElement(@RequestParam(required=false) String value,
                              @RequestParam(required=false) String type,
                              @PathVariable String urlPage,
                              @RequestParam(value = "file", required = false) MultipartFile file
                              ) throws IOException {
-        Page page = pageService.GetPage(urlPage);
+        Page page = pageService.getPage(urlPage);
         Element element = new Element();
 
         if(file !=null && !file.getOriginalFilename().isEmpty()){
-             element.setValue(elementService.UploadElement(file,uploadPath));
+             element.setValue(elementService.uploadElement(file,uploadPath));
         }
         else{
             if(type.equals("text") && value!=null) {
@@ -101,30 +101,30 @@ public class PageController {
         Set<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
-        pageService.AddPage(page);
+        pageService.addPage(page);
         return "redirect:/{urlPage}";
     }
 
     @PostMapping("/{urlPage}/edit")
-    public String EditPage(@RequestParam(required = false) String newNamePage,
+    public String editPage(@RequestParam(required = false) String newNamePage,
                            @PathVariable String urlPage){
-        Page page = pageService.GetPage(urlPage);
+        Page page = pageService.getPage(urlPage);
         page.setNamePage(newNamePage);
-        pageService.AddPage(page);
+        pageService.addPage(page);
         return "redirect:/";
     }
 
     @PostMapping("/{urlPage}/edit_el/{id}")
-    public String EditElement(@PathVariable Long id,
+    public String editElement(@PathVariable Long id,
                               @RequestParam(required = false) String type,
                               @RequestParam(required = false) String value,
                               @PathVariable String urlPage,
                               @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        Page page = pageService.GetPage(urlPage);
+        Page page = pageService.getPage(urlPage);
 
-        Optional<Element> optionalElement = elementService.GetElement(id);
+        Optional<Element> optionalElement = elementService.getElement(id);
         if(file !=null && !file.getOriginalFilename().isEmpty()){
-            optionalElement.get().setValue(elementService.UploadElement(file,uploadPath));
+            optionalElement.get().setValue(elementService.uploadElement(file,uploadPath));
             optionalElement.get().setType(type);
         }
         else{
@@ -141,25 +141,25 @@ public class PageController {
         Set<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
-        pageService.AddPage(page);
+        pageService.addPage(page);
         return "redirect:/{urlPage}";
     }
 
     @PostMapping("/{urlPage}/delete")
-    public String DeletePage(@PathVariable String urlPage){
-        pageService.DeletePage(urlPage);
+    public String deletePage(@PathVariable String urlPage){
+        pageService.deletePage(urlPage);
         return "redirect:/";
     }
 
     @PostMapping("/{urlPage}/delete_el/{id}")
-    public String DeleteElement(@PathVariable String urlPage, @PathVariable Long id){
-        elementService.DeleteElement(id);
+    public String deleteElement(@PathVariable String urlPage, @PathVariable Long id){
+        elementService.deleteElement(id);
         return "redirect:/{urlPage}";
     }
 
     @GetMapping("/feedback")
-    public String GetFeedback(Model model) {
-        List<Page> pages = (List<Page>) pageService.GetAllPages();
+    public String getFeedback(Model model) {
+        List<Page> pages = (List<Page>) pageService.getAllPages();
         model.addAttribute("pages", pages);
         model.addAttribute("isSent", false);
         return "feedback";
@@ -167,11 +167,11 @@ public class PageController {
 
 
     @PostMapping("/feedback")
-    public String Feedback(@RequestParam(required = false) String name,
+    public String feedback(@RequestParam(required = false) String name,
                            @RequestParam(required = false) String mail,
                            @RequestParam(required = false) String message,
                            Model model){
-        List<Page> pages = (List<Page>) pageService.GetAllPages();
+        List<Page> pages = (List<Page>) pageService.getAllPages();
         model.addAttribute("pages", pages);
 
         User user = new User(name, mail, message);
