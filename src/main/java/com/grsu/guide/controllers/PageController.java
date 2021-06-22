@@ -53,9 +53,10 @@ public class PageController {
         return "home";
     }
 
-    @GetMapping("/{urlPage}")
-    public String getPage(@PathVariable String urlPage, Model model){
-        Page page = pageService.getPage(urlPage);
+    @GetMapping("/page/{pageId}")
+    public String getPage(@PathVariable Long pageId, Model model){
+        Optional<Page> optionalPage = pageService.getPage(pageId);
+        Page page = optionalPage.get();
         List<Page> pages = (List<Page>) pageService.getAllPages();
         List <Element> sortedList = new ArrayList<>(page.getElements());
         sortedList.sort(Comparator.comparing(Element::getId));
@@ -70,19 +71,19 @@ public class PageController {
     public String addPage(@RequestParam(required = false) String newNamePage){
         Page page = new Page();
         page.setNamePage(newNamePage);
-        page.setUrlPage(UUID.randomUUID().toString());
         pageService.addPage(page);
         return "redirect:/";
     }
 
 
-    @PostMapping("/{urlPage}/add_el")
+    @PostMapping("/page/{pageId}/add_el")
     public String addElement(@RequestParam(required=false) String value,
                              @RequestParam(required=false) String type,
-                             @PathVariable String urlPage,
+                             @PathVariable Long pageId,
                              @RequestParam(value = "file", required = false) MultipartFile file
                              ) throws IOException {
-        Page page = pageService.getPage(urlPage);
+        Optional<Page> optionalPage = pageService.getPage(pageId);
+        Page page = optionalPage.get();
         Element element = new Element();
 
         if(file !=null && !file.getOriginalFilename().isEmpty()){
@@ -94,7 +95,7 @@ public class PageController {
             }
             else
             {
-                return "redirect:/{urlPage}";
+                return "redirect:/page/{pageId}";
             }
         }
         element.setType(type);
@@ -102,26 +103,26 @@ public class PageController {
         elements.add(element);
         page.setElements(elements);
         pageService.addPage(page);
-        return "redirect:/{urlPage}";
+        return "redirect:/page/{pageId}";
     }
 
-    @PostMapping("/{urlPage}/edit")
+    @PostMapping("/page/{pageId}/edit")
     public String editPage(@RequestParam(required = false) String newNamePage,
-                           @PathVariable String urlPage){
-        Page page = pageService.getPage(urlPage);
+                           @PathVariable Long pageId){
+        Optional<Page> optionalPage = pageService.getPage(pageId);
+        Page page = optionalPage.get();
         page.setNamePage(newNamePage);
         pageService.addPage(page);
         return "redirect:/";
     }
 
-    @PostMapping("/{urlPage}/edit_el/{id}")
+    @PostMapping("/page/{pageId}/edit_el/{id}")
     public String editElement(@PathVariable Long id,
+                              @PathVariable Long pageId,
                               @RequestParam(required = false) String type,
                               @RequestParam(required = false) String value,
-                              @PathVariable String urlPage,
                               @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        Page page = pageService.getPage(urlPage);
-
+        Optional<Page> optionalPage = pageService.getPage(pageId);
         Optional<Element> optionalElement = elementService.getElement(id);
         if(file !=null && !file.getOriginalFilename().isEmpty()){
             optionalElement.get().setValue(elementService.uploadElement(file,uploadPath));
@@ -134,27 +135,28 @@ public class PageController {
             }
             else
             {
-                return "redirect:/{urlPage}";
+                return "redirect:/page/{pageId}";
             }
         }
+        Page page = optionalPage.get();
         Element element = optionalElement.get();
         Set<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
         pageService.addPage(page);
-        return "redirect:/{urlPage}";
+        return "redirect:/page/{pageId}";
     }
 
-    @PostMapping("/{urlPage}/delete")
-    public String deletePage(@PathVariable String urlPage){
-        pageService.deletePage(urlPage);
+    @PostMapping("/page/{id}/delete")
+    public String deletePage(@PathVariable Long id){
+        pageService.deletePage(id);
         return "redirect:/";
     }
 
-    @PostMapping("/{urlPage}/delete_el/{id}")
-    public String deleteElement(@PathVariable String urlPage, @PathVariable Long id){
+    @PostMapping("/page/{pageId}/delete_el/{id}")
+    public String deleteElement(@PathVariable Long pageId, @PathVariable Long id){
         elementService.deleteElement(id);
-        return "redirect:/{urlPage}";
+        return "redirect:/page/{pageId}";
     }
 
     @GetMapping("/feedback")
