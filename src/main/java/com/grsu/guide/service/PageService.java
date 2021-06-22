@@ -5,6 +5,8 @@ import com.grsu.guide.domain.Page;
 import com.grsu.guide.repository.PageRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PageService {
    private final PageRepository pageRepository;
@@ -13,8 +15,8 @@ public class PageService {
         this.pageRepository = pageRepository;
     }
 
-    public Page getPage (String urlPage){
-        return pageRepository.findByUrlPage(urlPage);
+    public Optional<Page> getPage (Long id){
+        return pageRepository.findById(id);
     }
 
     public Iterable<Page> getAllPages(){
@@ -33,8 +35,8 @@ public class PageService {
         pageRepository.save(page);
     }
 
-    public void deletePage(String urlPage){
-        pageRepository.deleteById(getPage(urlPage).getId());
+    public void deletePage(Long id){
+        pageRepository.deleteById(getPage(id).get().getId());
     }
 
 
