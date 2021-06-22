@@ -193,5 +193,16 @@ public class PageController {
         return "feedback";
     }
 
+    @GetMapping("/search")
+    public String getSearch(@RequestParam(required = false) String searchRequest, Model model) {
+        List<Page> pages = (List<Page>) pageService.getAllPages();
+        model.addAttribute("pages", pages);
+        if(searchRequest != null){
+            List<Page> result = pageService.getPagesBySearchRequest(searchRequest);
+            model.addAttribute("searchRequest", searchRequest);
+            model.addAttribute("result", result);
+        }
+        return "search";
+    }
 
 }

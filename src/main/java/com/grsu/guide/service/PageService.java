@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import java.util.List;
+
 @Service
 public class PageService {
    private final PageRepository pageRepository;
@@ -39,6 +41,9 @@ public class PageService {
         pageRepository.deleteById(getPage(id).get().getId());
     }
 
+    public List<Page> getPagesBySearchRequest(String searchRequest) {
+        return pageRepository.findPagesByNamePageContains(searchRequest);
+    }
 
 }
 
