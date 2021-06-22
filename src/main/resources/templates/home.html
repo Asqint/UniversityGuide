@@ -66,14 +66,14 @@
             <div class="modal-content">
                 <form th:action="@{'/'+${page.getUrlPage()}+'/edit'}" method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Rename page</h5>
+                        <h5 class="modal-title" id="editModalLabel">Edit page</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="text" required name="newNamePage" class="form-control" th:value="${page.getNamePage()}" id="pageNameEdit" placeholder="Page Name">
                     </div>
                     <div class="modal-buttons-div">
-                        <button type="submit" class="common_button">Save changes</button>
+                        <button type="submit" class="common_button">Rename page</button>
                     </div>
                 </form>
                 <div th:if="${pages.size()>1}" class="modal-buttons-div">
