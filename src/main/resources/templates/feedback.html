@@ -14,11 +14,11 @@
 
     <!--NAVBAR-->
     <ul class="nav nav-pills nav-justified">
-        <a class="logo" th:href="@{'/'+ ${pages[0].getUrlPage()}}">
+        <a class="logo" th:href="@{'/page/'+ ${pages[0].getId()}}">
             <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
         </a>
         <li class="nav-item" th:each="pageN:${pages}">
-            <a th:href="@{'/'+ ${pageN.getUrlPage()}}" class="nav-link nav-link-add " th:text="${pageN.getNamePage()}"></a>
+            <a th:href="@{'/page/'+ ${pageN.getId()}}" class="nav-link nav-link-add " th:text="${pageN.getNamePage()}"></a>
         </li>
         <li class="nav-item">
             <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
