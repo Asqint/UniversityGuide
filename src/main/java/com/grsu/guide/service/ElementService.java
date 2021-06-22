@@ -21,13 +21,13 @@ public class ElementService {
         this.elementRepository = elementRepository;
     }
 
-    public Optional<Element> GetElement(Long id){
+    public Optional<Element> getElement(Long id){
         return elementRepository.findById(id);
     }
 
-    public void DeleteElement(Long id){ elementRepository.deleteById(id);}
+    public void deleteElement(Long id){ elementRepository.deleteById(id);}
 
-    public String UploadElement(MultipartFile file, String uploadPath) throws IOException {
+    public String uploadElement(MultipartFile file, String uploadPath) throws IOException {
         File uploadFolder = new File(uploadPath);
         if(!uploadFolder.exists()){
             uploadFolder.mkdir();
