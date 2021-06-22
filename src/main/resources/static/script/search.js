@@ -9,6 +9,18 @@ window.onload = () => {
             if(value.includes(' ')) {
                 value = value.replace(/ /g,'+');
             }
+            if(value.includes('[')) {
+                value = value.replace('[','');
+            }
+            if(value.includes(']')) {
+                value = value.replace(']','');
+            }
+            if(value.includes('\\')) {
+                value = value.replace('\\','');
+            }
+            if(value.includes('|')) {
+                value = value.replace('|','');
+            }
             location.replace("/search?searchRequest="+value);
         }
     }
