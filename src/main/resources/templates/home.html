@@ -8,17 +8,17 @@
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
           crossorigin="anonymous"
     >
-    <link th:href="@{css/style.css}" rel='stylesheet'>
+    <link th:href="@{../css/style.css}" rel='stylesheet' >
 </head>
 <body>
 
     <!--NAVBAR-->
     <ul class="nav nav-pills nav-justified">
-        <a class="logo" th:href="@{'/'+ ${pages[0].getUrlPage()}}">
-            <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
+        <a class="logo" th:href="@{'/page/'+ ${pages[0].getId()}}">
+            <img th:src="@{../img/grsu.png}" alt="logo.png" width="80" height="80">
         </a>
         <li class="nav-item" th:each="pageN:${pages}">
-            <a th:href="@{'/'+ ${pageN.getUrlPage()}}" class="nav-link nav-link-add " th:text="${pageN.getNamePage()}"></a>
+            <a th:href="@{'/page/'+ ${pageN.getId()}}" class="nav-link nav-link-add " th:text="${pageN.getNamePage()}"></a>
         </li>
         <li class="nav-item">
             <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
@@ -64,7 +64,7 @@
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form th:action="@{'/'+${page.getUrlPage()}+'/edit'}" method="post">
+                <form th:action="@{'/page/'+${page.getId()}+'/edit'}" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editModalLabel">Edit page</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -77,7 +77,7 @@
                     </div>
                 </form>
                 <div th:if="${pages.size()>1}" class="modal-buttons-div">
-                    <form th:action="@{'/'+${page.getUrlPage()}+'/delete/'}" method="post">
+                    <form th:action="@{'/page/'+${page.getId()}+'/delete/'}" method="post">
                         <button type="submit" class="common_button">Delete page</button>
                     </form>
                 </div>
@@ -103,13 +103,13 @@
             <div class="col-xl">
                 <!--ELEMENT-->
                 <video width="700px" class="element" muted="muted" controls loop th:if="${element.getType()=='video'}">
-                    <source th:src="${'uploads/' + element.value}" type="video/mp4">
+                    <source th:src="${'../uploads/' + element.value}" type="video/mp4">
                 </video>
-                <img width="700px" class="element"  th:src="${'uploads/' + element.value}" th:if="${element.getType()=='image'}">
+                <img width="700px" class="element"  th:src="${'../uploads/' + element.value}" th:if="${element.getType()=='image'}">
                 <div class="element text" th:utext="${element.value}" th:if="${element.getType()=='text'}">
                 </div>
 
-                <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/'+ ${page.getUrlPage()} +'/delete_el/' + ${element.getId()}}" method="post">
+                <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
                     <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
                         Edit
                     </button>
@@ -121,14 +121,14 @@
                     <div class="card card-body">
                         <div class="tabs">
                             <div th:id="'content-1-edit'+${stat.index}">
-                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getUrlPage()} +'/edit_el/' + ${element.getId()}}" method="post">
+                                <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <textarea class="editor_txt" name="value" id="textInput-edit" rows="3"></textarea>
                                     <input type="hidden" id="type1-edit" name="type" value="text">
                                     <input class="common_button" type="submit" value="Add">
                                 </form>
                             </div>
                             <div th:id="'content-2-edit'+${stat.index}">
-                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getUrlPage()} +'/edit_el/' + ${element.getId()}}" method="post">
+                                <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="formFile1" class="form-label">Select your video</label>
                                     <input class="form-control" type="file" accept="video/*" id="formFile1-edit" name="file">
                                     <input type="hidden" id="type2-edit" name="type" value="video">
@@ -136,7 +136,7 @@
                                 </form>
                             </div>
                             <div th:id="'content-3-edit'+${stat.index}">
-                                <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getUrlPage()} +'/edit_el/' + ${element.getId()}}" method="post">
+                                <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
                                     <label for="formFile2" class="form-label">Select your image</label>
                                     <input class="form-control" accept="image/*" name="file" type="file" id="formFile2-edit">
                                     <input type="hidden" id="type3-edit" name="type" value="image">
@@ -161,14 +161,14 @@
             <div class="col-xl add">
                 <div class="tabs">
                     <div id="content-1">
-                        <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getUrlPage()} +'/add_el'}" method="post">
+                        <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
                             <textarea class="editor_txt" name="value" id="textInput" rows="3"></textarea>
                             <input type="hidden" id="type1" name="type" value="text">
                             <input class="common_button" type="submit" value="Add">
                         </form>
                     </div>
                     <div id="content-2">
-                        <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getUrlPage()} +'/add_el'}" method="post">
+                        <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
                             <label for="formFile1" class="form-label">Select your video</label>
                             <input class="form-control" type="file" accept="video/*" id="formFile1" name="file">
                             <input type="hidden" id="type2" name="type" value="video">
@@ -176,7 +176,7 @@
                         </form>
                     </div>
                     <div id="content-3">
-                        <form enctype="multipart/form-data" th:action="@{'/'+ ${page.getUrlPage()} +'/add_el'}" method="post">
+                        <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
                             <label for="formFile2" class="form-label">Select your image</label>
                             <input class="form-control" accept="image/*" name="file" type="file" id="formFile2">
                             <input type="hidden" id="type3" name="type" value="image">
@@ -197,7 +197,7 @@
             integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
             crossorigin="anonymous">
     </script>
-    <script th:src="@{tinymce/tinymce.min.js}"></script>
+    <script th:src="@{../tinymce/tinymce.min.js}"></script>
 
     <script type="text/javascript">
         tinymce.init({
