@@ -13,7 +13,7 @@
 <body>
     <!--NAVBAR-->
     <ul class="nav nav-pills nav-justified">
-        <a class="logo" th:href="@{'/'+ ${pages[0].getId()}}">
+        <a class="logo" th:href="@{'/page/'+ ${pages[0].getId()}}">
             <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
         </a>
         <li class="nav-item" th:each="pageN:${pages}">

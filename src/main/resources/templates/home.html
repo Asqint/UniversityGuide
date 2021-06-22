@@ -100,57 +100,59 @@
             <div class="col">
             </div>
         </div>
-        <div class="row justify-content-md-center" th:each="element, stat:${elements}">
+        <div class="row justify-content-md-center">
             <div class="col">
             </div>
             <div class="col-xl">
                 <!--ELEMENT-->
-                <video width="700px" class="element" muted="muted" controls loop th:if="${element.getType()=='video'}">
-                    <source th:src="${'../uploads/' + element.value}" type="video/mp4">
-                </video>
-                <img width="700px" class="element"  th:src="${'../uploads/' + element.value}" th:if="${element.getType()=='image'}">
-                <div class="element text" th:utext="${element.value}" th:if="${element.getType()=='text'}">
-                </div>
+                <div th:each="element, stat:${elements}">
+                    <video width="700px" class="element" muted="muted" controls loop th:if="${element.getType()=='video'}">
+                        <source th:src="${'../uploads/' + element.value}" type="video/mp4">
+                    </video>
+                    <img width="700px" class="element"  th:src="${'../uploads/' + element.value}" th:if="${element.getType()=='image'}">
+                    <div class="element text" th:utext="${element.value}" th:if="${element.getType()=='text'}">
+                    </div>
 
-                <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
-                    <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
-                        Edit
-                    </button>
-                    <input type="hidden" th:id="${element.getId()}"/>
-                    <button type="submit" class="common_button">Delete</button>
-                </form>
-                <!--EDIT ELEMENT COLLAPSE-->
-                <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <div class="card card-body">
-                        <div class="tabs">
-                            <div th:id="'content-1-edit'+${stat.index}">
-                                <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
-                                    <textarea class="editor_txt" name="value" id="textInput-edit" rows="3"></textarea>
-                                    <input type="hidden" id="type1-edit" name="type" value="text">
-                                    <input class="common_button" type="submit" value="Add">
-                                </form>
-                            </div>
-                            <div th:id="'content-2-edit'+${stat.index}">
-                                <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
-                                    <label for="formFile1" class="form-label">Select your video</label>
-                                    <input class="form-control" type="file" accept="video/*" id="formFile1-edit" name="file">
-                                    <input type="hidden" id="type2-edit" name="type" value="video">
-                                    <input class="common_button" type="submit" value="Add">
-                                </form>
-                            </div>
-                            <div th:id="'content-3-edit'+${stat.index}">
-                                <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
-                                    <label for="formFile2" class="form-label">Select your image</label>
-                                    <input class="form-control" accept="image/*" name="file" type="file" id="formFile2-edit">
-                                    <input type="hidden" id="type3-edit" name="type" value="image">
-                                    <input class="common_button" type="submit" value="Add">
-                                </form>
-                            </div>
+                    <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
+                        <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
+                            Edit
+                        </button>
+                        <input type="hidden" th:id="${element.getId()}"/>
+                        <button type="submit" class="common_button">Delete</button>
+                    </form>
+                    <!--EDIT ELEMENT COLLAPSE-->
+                    <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="card card-body">
+                            <div class="tabs">
+                                <div th:id="'content-1-edit'+${stat.index}">
+                                    <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
+                                        <textarea class="editor_txt" name="value" id="textInput-edit" rows="3"></textarea>
+                                        <input type="hidden" id="type1-edit" name="type" value="text">
+                                        <input class="common_button" type="submit" value="Add">
+                                    </form>
+                                </div>
+                                <div th:id="'content-2-edit'+${stat.index}">
+                                    <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
+                                        <label for="formFile1" class="form-label">Select your video</label>
+                                        <input class="form-control" type="file" accept="video/*" id="formFile1-edit" name="file">
+                                        <input type="hidden" id="type2-edit" name="type" value="video">
+                                        <input class="common_button" type="submit" value="Add">
+                                    </form>
+                                </div>
+                                <div th:id="'content-3-edit'+${stat.index}">
+                                    <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/' + ${element.getId()}}" method="post">
+                                        <label for="formFile2" class="form-label">Select your image</label>
+                                        <input class="form-control" accept="image/*" name="file" type="file" id="formFile2-edit">
+                                        <input type="hidden" id="type3-edit" name="type" value="image">
+                                        <input class="common_button" type="submit" value="Add">
+                                    </form>
+                                </div>
 
-                            <div class="tabs__links">
-                                <a th:href="'#content-1-edit'+${stat.index}">Add text</a>
-                                <a th:href="'#content-2-edit'+${stat.index}">Add video</a>
-                                <a th:href="'#content-3-edit'+${stat.index}">Add image</a>
+                                <div class="tabs__links">
+                                    <a th:href="'#content-1-edit'+${stat.index}">Add text</a>
+                                    <a th:href="'#content-2-edit'+${stat.index}">Add video</a>
+                                    <a th:href="'#content-3-edit'+${stat.index}">Add image</a>
+                                </div>
                             </div>
                         </div>
                     </div>
