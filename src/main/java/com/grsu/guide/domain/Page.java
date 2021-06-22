@@ -22,9 +22,6 @@ public class Page {
     @Column(name="name_page")
     private String namePage;
 
-    @Column(name="url_page")
-    private String urlPage;
-
     @EqualsAndHashCode.Exclude
     @Column(name="element")
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -33,10 +30,9 @@ public class Page {
     private Set<Element> elements;
 
 
-    public Page(String namePage,String urlPage, Set<Element> elements){
+    public Page(String namePage, Set<Element> elements){
         this.namePage = namePage;
         this.elements = elements;
-        this.urlPage = urlPage;
     }
 
     public Page() {}
