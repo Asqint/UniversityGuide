@@ -52,17 +52,14 @@ public class PageController {
     @GetMapping("/page/{pageId}")
     public String getPage(@PathVariable Long pageId, Model model){
         Optional<Page> optionalPage = pageService.getPage(pageId);
-        if(optionalPage.get().getParentPageId() != 0L){
-            Optional<Page> optionalParentPage = pageService.getPage(optionalPage.get().getParentPageId());
-            Page parentPage = optionalParentPage.get();
-            model.addAttribute("parentPage", parentPage);
-        }
-
         Page page = optionalPage.get();
+        if(page.getParentPageId()!=0L) {
+            List<Page> hierarchyPages = (List<Page>) pageService.getHierarchyPages(page.getParentPageId());
+            model.addAttribute("hierarchyPages", hierarchyPages);
+        }
         List<Page> parentPages = (List<Page>) pageService.getAllParentPages(0L);
         List<Page> childPages = (List<Page>) pageService.getAllChildPages(pageId);
         List <Element> sortedList = new ArrayList<>(page.getElements());
-
         sortedList.sort(Comparator.comparing(Element::getId));
         model.addAttribute("elements",sortedList );
         model.addAttribute("parentPages", parentPages);

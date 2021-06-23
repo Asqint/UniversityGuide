@@ -5,6 +5,7 @@ import com.grsu.guide.domain.Page;
 import com.grsu.guide.repository.PageRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -48,5 +49,16 @@ public class PageService {
         return pageRepository.findPagesByNamePageContains(searchRequest);
     }
 
+    public List<Page> getHierarchyPages(Long currentPageId) {
+        List<Page> hierarchyPages = new ArrayList<>();
+        Page page;
+        while(currentPageId!=0) {
+            page = getPage(currentPageId).orElseThrow(NullPointerException::new);
+            hierarchyPages.add(page);
+            currentPageId = page.getParentPageId();
+        }
+        Collections.reverse(hierarchyPages);
+        return hierarchyPages;
+    }
 }
 
