@@ -11,6 +11,10 @@ import java.util.List;
 
 @Repository
 public interface PageRepository extends CrudRepository<Page,Long> {
+
     Optional<Page> findById(Long id);
+
     List<Page> findPagesByNamePageContains(String namePageContains);
+
+    Iterable<Page> findPagesByParentPageId(Long id);
 }
