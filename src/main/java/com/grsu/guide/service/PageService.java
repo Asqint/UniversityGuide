@@ -5,6 +5,7 @@ import com.grsu.guide.domain.Page;
 import com.grsu.guide.repository.PageRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import java.util.List;
@@ -21,8 +22,10 @@ public class PageService {
         return pageRepository.findById(id);
     }
 
-    public Iterable<Page> getAllPages(){
-        return pageRepository.findAll();
+    public Iterable<Page> getAllChildPages(Long id) {return  pageRepository.findPagesByParentPageId(id);}
+
+    public Iterable<Page> getAllParentPages(Long id){
+        return pageRepository.findPagesByParentPageId(id);
     }
 
     public void addPage(Page page){
