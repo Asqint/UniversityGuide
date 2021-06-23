@@ -11,10 +11,11 @@ create table element (
 create table page (
     id bigint not null,
     name_page varchar(255) not null,
+    parent_page_id bigint,
     primary key (id)
 );
 
-create table user (
+create table usr (
     id bigint not null,
     email varchar(255),
     message varchar(2048),

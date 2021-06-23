@@ -1,1 +1,1 @@
-insert into page (id, name_page) values(1,'Home');
+insert into page (id, name_page, parent_page_id) values(1,'Home', 0);
