@@ -43,27 +43,43 @@ public class PageController {
     }
 
     @GetMapping("/")
-        public String main( Model model){
-        List<Page> pages = (List<Page>) pageService.getAllPages();
-        List <Element> sortedList = new ArrayList<>(pages.get(0).getElements());
-        sortedList.sort(Comparator.comparing(Element::getId));
-        model.addAttribute("elements",sortedList);
-        model.addAttribute("pages", pages);
-        model.addAttribute("page", pages.get(0));
-        return "home";
+        public String main(Model model){
+        List<Page> parentPages = (List<Page>) pageService.getAllParentPages(0L);
+        Long pageId = parentPages.get(0).getId();
+        return "redirect:/page/"+pageId;
     }
 
     @GetMapping("/page/{pageId}")
     public String getPage(@PathVariable Long pageId, Model model){
         Optional<Page> optionalPage = pageService.getPage(pageId);
+        if(optionalPage.get().getParentPageId() != 0L){
+            Optional<Page> optionalParentPage = pageService.getPage(optionalPage.get().getParentPageId());
+            Page parentPage = optionalParentPage.get();
+            model.addAttribute("parentPage", parentPage);
+        }
+
         Page page = optionalPage.get();
-        List<Page> pages = (List<Page>) pageService.getAllPages();
+        List<Page> parentPages = (List<Page>) pageService.getAllParentPages(0L);
+        List<Page> childPages = (List<Page>) pageService.getAllChildPages(pageId);
         List <Element> sortedList = new ArrayList<>(page.getElements());
+
         sortedList.sort(Comparator.comparing(Element::getId));
         model.addAttribute("elements",sortedList );
-        model.addAttribute("pages", pages);
+        model.addAttribute("parentPages", parentPages);
+        model.addAttribute("childPages", childPages);
         model.addAttribute("page", page);
         return "home";
+    }
+
+
+    @PostMapping("/page/{parentId}/add_child_page")
+    public String addChildPage(@PathVariable Long parentId,
+                               @RequestParam String newNamePage){
+        Page childPage = new Page();
+        childPage.setNamePage(newNamePage);
+        childPage.setParentPageId(parentId);
+        pageService.addPage(childPage);
+        return "redirect:/page/{parentId}";
     }
 
 
@@ -71,6 +87,7 @@ public class PageController {
     public String addPage(@RequestParam(required = false) String newNamePage){
         Page page = new Page();
         page.setNamePage(newNamePage);
+        page.setParentPageId(0L);
         pageService.addPage(page);
         return "redirect:/";
     }
@@ -147,9 +164,9 @@ public class PageController {
         return "redirect:/page/{pageId}";
     }
 
-    @PostMapping("/page/{id}/delete")
-    public String deletePage(@PathVariable Long id){
-        pageService.deletePage(id);
+    @PostMapping("/page/{pageId}/delete")
+    public String deletePage(@PathVariable Long pageId){
+        pageService.deletePage(pageId);
         return "redirect:/";
     }
 
@@ -161,7 +178,7 @@ public class PageController {
 
     @GetMapping("/feedback")
     public String getFeedback(Model model) {
-        List<Page> pages = (List<Page>) pageService.getAllPages();
+        List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
         model.addAttribute("isSent", false);
         return "feedback";
@@ -173,7 +190,7 @@ public class PageController {
                            @RequestParam(required = false) String mail,
                            @RequestParam(required = false) String message,
                            Model model){
-        List<Page> pages = (List<Page>) pageService.getAllPages();
+        List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
 
         User user = new User(name, mail, message);
@@ -195,7 +212,7 @@ public class PageController {
 
     @GetMapping("/search")
     public String getSearch(@RequestParam(required = false) String searchRequest, Model model) {
-        List<Page> pages = (List<Page>) pageService.getAllPages();
+        List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
         if(searchRequest != null){
             List<Page> result = pageService.getPagesBySearchRequest(searchRequest);
