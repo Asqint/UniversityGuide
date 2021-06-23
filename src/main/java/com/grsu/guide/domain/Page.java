@@ -22,6 +22,9 @@ public class Page {
     @Column(name="name_page")
     private String namePage;
 
+    @Column(name="parent_page_id")
+    private Long parentPageId;
+
     @EqualsAndHashCode.Exclude
     @Column(name="element")
     @LazyCollection(LazyCollectionOption.FALSE)
