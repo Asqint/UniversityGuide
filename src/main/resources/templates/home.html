@@ -27,19 +27,20 @@
             <a th:href="@{/search}" class="nav-link nav-link-add">Search</a>
         </li>
         <div class="nav-button-div">
-            <button type="button" class="nav-button" data-bs-toggle="modal" data-bs-target="#addModal" sec:authorize="hasRole('ROLE_ADMIN')">
-                Add page
+            <button sec:authorize="hasRole('ROLE_ADMIN')" class="nav-dropdown-button" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                &#9776
             </button>
-            <button type="button" class="nav-button" data-bs-toggle="modal" data-bs-target="#editModal" sec:authorize="hasRole('ROLE_ADMIN')">
-                Edit page
-            </button>
-        </div>
-        <div class="nav-button-div" sec:authorize="hasRole('ROLE_ADMIN')">
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="nav-button">
-                    Logout
-                </button>
-            </form>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#addModal">Add page</button></li>
+                <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editModal">Rename page</button></li>
+                <li th:if="${pages.size()>1}">
+                    <form th:action="@{'/page/'+${page.getId()}+'/delete/'}" method="post">
+                        <button type="submit" class="dropdown-item">Delete page</button>
+                    </form>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+            </ul>
         </div>
     </ul>
 
@@ -69,7 +70,7 @@
             <div class="modal-content">
                 <form th:action="@{'/page/'+${page.getId()}+'/edit'}" method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit page</h5>
+                        <h5 class="modal-title" id="editModalLabel">Rename page</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -79,11 +80,6 @@
                         <button type="submit" class="common_button">Rename page</button>
                     </div>
                 </form>
-                <div th:if="${pages.size()>1}" class="modal-buttons-div">
-                    <form th:action="@{'/page/'+${page.getId()}+'/delete/'}" method="post">
-                        <button type="submit" class="common_button">Delete page</button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

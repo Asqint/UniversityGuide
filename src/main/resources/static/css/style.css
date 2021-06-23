@@ -127,8 +127,24 @@
 }
 
 .nav-button-div {
-    width: 95px;
-    margin-top: 8px;
+    margin: 20px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.nav-dropdown-button {
+    font-size: 16px;
+    background-color: #263796;
+    color: white;
+    border: 2px solid white;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+}
+
+.nav-dropdown-button:hover {
+    background-color: white;
+    color: #263796;
+    border: 2px solid #263796;
 }
 
 .common_button {
