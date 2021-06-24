@@ -59,14 +59,32 @@
     </div>
 
     <!--SEARCH-->
-    <div class="container">
+    <div class="container justify-content-md-center">
         <div class="row">
             <div class="col">
             </div>
             <div class="col-xl">
-                <input th:value="${searchRequest}" autofocus onfocus="this.selectionStart = this.selectionEnd = this.value.length;" placeholder="Page name" class="form-control search" name="search" type="text" id="search">
-                <div th:if="${result!=null}">
-                    <a th:each="resultPage:${result}" th:href="@{'/page/'+ ${resultPage.getId()}}" class="list-group-item list-group-item-action" th:text="${resultPage.getNamePage()}"></a>
+                <div class="input-group flex-nowrap form-control search-div">
+                    <span class="search-span" id="search-span">
+                        <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+                    </span>
+                    <input th:value="${searchRequest}" autofocus onfocus="this.selectionStart = this.selectionEnd = this.value.length;" class="search-input" placeholder="Search" name="search" type="text" id="search" aria-describedby="search-span">
+                </div>
+                <div th:if="${result!=null}" class="container">
+                    <div th:if="${result.size()==0}" class="search-no-result">
+                        No result
+                    </div>
+                    <div th:each="resultPage:${result}" style="transform: rotate(0);" class="search-result">
+                        <a class="stretched-link search-link" th:href="@{'/page/'+ ${resultPage.getId()}}" th:text="${resultPage.getNamePage()}"></a>
+                        <div th:if="${resultPage.getElements().size()!=0}">
+                            <video width="700px" class="search-element" muted="muted" controls loop th:if="${resultPage.getElements()[0].getType()=='video'}">
+                                <source th:src="${'../uploads/' + resultPage.getElements()[0].value}" type="video/mp4">
+                            </video>
+                            <img width="700px" class="search-element"  th:src="${'../uploads/' + resultPage.getElements()[0].value}" th:if="${resultPage.getElements()[0].getType()=='image'}">
+                            <div class="search-element text" th:utext="${resultPage.getElements()[0].value}" th:if="${resultPage.getElements()[0].getType()=='text'}">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col">

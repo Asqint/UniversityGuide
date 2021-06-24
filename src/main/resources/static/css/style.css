@@ -213,8 +213,42 @@ body {
     justify-content: flex-end;
 }
 
-.search{
+.search-element {
+    width: 800px;
+    margin-top: 10px;
+}
+
+.search-link {
+    text-decoration: none;
+    color: #263796;
+    font-size: 20px;
+}
+
+.search-input {
+    border: none;
+    width: 95%;
+    margin:0 0 0 5px;
+}
+
+.search-input {
+    outline: none;
+}
+
+.search-div{
     margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+}
+
+.search-span {
+    color: #9aa0a6;
+    height: 20px;
+    width: 20px;
+}
+
+.search-span>svg {
+    fill:currentColor;
 }
 
 .menu{
@@ -229,6 +263,16 @@ body {
 .menu a{
     border-radius: 8px;
     color: #263796;
+}
+
+.search-result {
+    margin-top: 80px;
+    width: 800px;
+}
+
+.search-no-result {
+    margin-top: 20px;
+    color: #999999;
 }
 
 .menu a:hover {
