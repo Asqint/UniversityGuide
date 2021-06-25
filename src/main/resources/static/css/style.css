@@ -102,6 +102,7 @@ hr {
 
 .add {
     margin-top:50px;
+    min-width: 824px;
     margin-bottom: 100px;
 }
 

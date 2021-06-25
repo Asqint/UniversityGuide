@@ -92,27 +92,12 @@ public class PageController {
 
     @PostMapping("/page/{pageId}/add_el")
     public String addElement(@RequestParam(required=false) String value,
-                             @RequestParam(required=false) String type,
-                             @PathVariable Long pageId,
-                             @RequestParam(value = "file", required = false) MultipartFile file
-                             ) throws IOException {
+                             @PathVariable Long pageId)
+    {
         Optional<Page> optionalPage = pageService.getPage(pageId);
         Page page = optionalPage.get();
         Element element = new Element();
-
-        if(file !=null && !file.getOriginalFilename().isEmpty()){
-             element.setValue(elementService.uploadElement(file,uploadPath));
-        }
-        else{
-            if(type.equals("text") && value!=null) {
-                element.setValue(value);
-            }
-            else
-            {
-                return "redirect:/page/{pageId}";
-            }
-        }
-        element.setType(type);
+        element.setValue(value);
         Set<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
@@ -122,7 +107,8 @@ public class PageController {
 
     @PostMapping("/page/{pageId}/edit")
     public String editPage(@RequestParam(required = false) String newNamePage,
-                           @PathVariable Long pageId){
+                           @PathVariable Long pageId)
+    {
         Optional<Page> optionalPage = pageService.getPage(pageId);
         Page page = optionalPage.get();
         page.setNamePage(newNamePage);
@@ -133,25 +119,11 @@ public class PageController {
     @PostMapping("/page/{pageId}/edit_el/{id}")
     public String editElement(@PathVariable Long id,
                               @PathVariable Long pageId,
-                              @RequestParam(required = false) String type,
-                              @RequestParam(required = false) String value,
-                              @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+                              @RequestParam(required = false) String value)
+    {
         Optional<Page> optionalPage = pageService.getPage(pageId);
         Optional<Element> optionalElement = elementService.getElement(id);
-        if(file !=null && !file.getOriginalFilename().isEmpty()){
-            optionalElement.get().setValue(elementService.uploadElement(file,uploadPath));
-            optionalElement.get().setType(type);
-        }
-        else{
-            if(type.equals("text")) {
-                optionalElement.get().setType(type);
-                optionalElement.get().setValue(value);
-            }
-            else
-            {
-                return "redirect:/page/{pageId}";
-            }
-        }
+        optionalElement.get().setValue(value);
         Page page = optionalPage.get();
         Element element = optionalElement.get();
         Set<Element> elements = page.getElements();
@@ -168,7 +140,7 @@ public class PageController {
     }
 
     @PostMapping("/page/{pageId}/delete_el/{id}")
-    public String deleteElement(@PathVariable Long pageId, @PathVariable Long id){
+    public String deleteElement(@PathVariable Long id, @PathVariable String pageId){
         elementService.deleteElement(id);
         return "redirect:/page/{pageId}";
     }
@@ -218,5 +190,4 @@ public class PageController {
         }
         return "search";
     }
-
 }
