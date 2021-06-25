@@ -1,20 +1,18 @@
 package com.grsu.guide.controllers;
 
-import com.grsu.guide.domain.Element;
-import com.grsu.guide.domain.Page;
-import com.grsu.guide.domain.User;
-import com.grsu.guide.service.ElementService;
-import com.grsu.guide.service.PageService;
-import com.grsu.guide.service.SmtpMailSender;
-import com.grsu.guide.service.UserService;
+import com.grsu.guide.domain.*;
+import com.grsu.guide.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.attribute.UserPrincipal;
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -24,13 +22,17 @@ public class PageController {
     private final PageService pageService;
     private final ElementService elementService;
     private final UserService userService;
+    private final FeedbackService feedbackService;
+    private final TemplateService templateService;
 
     @Autowired
-    public PageController(SmtpMailSender mailSender, PageService pageService, ElementService elementService, UserService userService){
+    public PageController(SmtpMailSender mailSender, PageService pageService, ElementService elementService, UserService userService, FeedbackService feedbackService, TemplateService templateService){
         this.mailSender = mailSender;
         this.pageService = pageService;
         this.elementService = elementService;
         this.userService = userService;
+        this.feedbackService = feedbackService;
+        this.templateService = templateService;
     }
 
 
@@ -50,7 +52,9 @@ public class PageController {
     }
 
     @GetMapping("/page/{pageId}")
-    public String getPage(@PathVariable Long pageId, Model model){
+    public String getPage(@PathVariable Long pageId,
+                          Principal user,
+                          Model model){
         Optional<Page> optionalPage = pageService.getPage(pageId);
         Page page = optionalPage.get();
         if(page.getParentPageId()!=0L) {
@@ -60,6 +64,10 @@ public class PageController {
         List<Page> parentPages = (List<Page>) pageService.getAllParentPages(0L);
         List<Page> childPages = (List<Page>) pageService.getAllChildPages(pageId);
         List <Element> sortedList = new ArrayList<>(page.getElements());
+        if(user != null){
+            List<Template> templates = templateService.findAllTemplatesById(userService.findUserByUserName(user.getName()).getId());
+            model.addAttribute("templates", templates);
+        }
         sortedList.sort(Comparator.comparing(Element::getId));
         model.addAttribute("elements",sortedList );
         model.addAttribute("parentPages", parentPages);
@@ -89,6 +97,16 @@ public class PageController {
         return "redirect:/";
     }
 
+    @PostMapping("/page/{pageId}/add_template")
+    public String addTemplate(@RequestParam(required=false) Long id,
+                              @RequestParam(required=false) String name,
+                              Principal user) {
+        Optional<Element> optionalElement = elementService.getElement(id);
+        Element element = optionalElement.get();
+        Template template = new Template(name,element.getValue(),userService.findUserByUserName(user.getName()).getId());
+        templateService.addTemplate(template);
+        return "redirect:/page/{pageId}";
+    }
 
     @PostMapping("/page/{pageId}/add_el")
     public String addElement(@RequestParam(required=false) String value,
@@ -135,6 +153,10 @@ public class PageController {
 
     @PostMapping("/page/{pageId}/delete")
     public String deletePage(@PathVariable Long pageId){
+        List<Page> childPages =  (List<Page>)pageService.getAllChildPages(pageId);
+        if(childPages.size() != 0){
+            pageService.deleteAllChildPagesByParentId(pageId);
+        }
         pageService.deletePage(pageId);
         return "redirect:/";
     }
@@ -149,7 +171,6 @@ public class PageController {
     public String getFeedback(Model model) {
         List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
-        model.addAttribute("isSent", false);
         return "feedback";
     }
 
@@ -162,8 +183,8 @@ public class PageController {
         List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
 
-        User user = new User(name, mail, message);
-
+        Feedback feedback = new Feedback(name, mail, message);
+        model.addAttribute("isSent", 2);
         String messageTo = String.format(
                 "Email: %s \n" +
                         "Name: %s \n" +
@@ -172,10 +193,16 @@ public class PageController {
 
         );
 
-        userService.saveUser(user);
-        mailSender.send("Feedback", messageTo);
+        feedbackService.saveFeedback(feedback);
+        try {
+            mailSender.send("Feedback", messageTo);
+        }
+        catch (Exception e){
+            model.addAttribute("isSent", 0);
+        }
 
-        model.addAttribute("isSent", true);
+
+        model.addAttribute("isSent", 1);
         return "feedback";
     }
 
