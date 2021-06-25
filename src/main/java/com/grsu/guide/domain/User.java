@@ -2,8 +2,11 @@ package com.grsu.guide.domain;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @Table(name = "usr")
@@ -18,17 +21,19 @@ public class User {
     @Column(name="user_name")
     private String userName;
 
-    @Column(name="email")
-    private String email;
+    @Column(name="password")
+    private String password;
 
-    @Column(name="message")
-    private String message;
+    @Column(name="role")
+    private String role;
 
-    public User(String user_name,String email,String message){
-        this.userName = user_name;
-        this.email = email;
-        this.message = message;
+
+    public User(String name,String password, String role){
+        this.userName = name;
+        this.password = password;
+        this.role = role;
     }
 
     public User() {}
+
 }
