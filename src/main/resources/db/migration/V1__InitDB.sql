@@ -7,6 +7,14 @@ create table element (
     primary key (id)
 );
 
+create table template (
+    id bigint not null,
+    name varchar(255),
+    value varchar(max) not null,
+    user_id bigint,
+    primary key (id)
+);
+
 create table page (
     id bigint not null,
     name_page varchar(255) not null,
@@ -16,10 +24,18 @@ create table page (
 
 create table usr (
     id bigint not null,
-    email varchar(255),
-    message varchar(2048),
     user_name varchar(255),
+    password varchar(255),
+    role varchar(255),
     primary key (id)
+);
+
+create table feedback (
+     id bigint not null,
+     name varchar(255),
+     email varchar(255),
+     message varchar(255),
+     primary key (id)
 );
 
 alter table element
