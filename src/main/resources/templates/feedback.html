@@ -75,8 +75,11 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <div  style="margin-top: 20px" class="alert alert-success" role="alert" th:if="${isSent}">
+        <div  style="margin-top: 20px" class="alert alert-success" role="alert" th:if="${isSent==1}">
             Your message has been successfully sent
+        </div>
+        <div  style="margin-top: 20px" class="alert alert-danger" role="alert" th:if="${isSent==0}">
+            Your message don't been sent
         </div>
     </div>
 
