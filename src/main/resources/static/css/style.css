@@ -102,6 +102,7 @@ hr {
 
 .add {
     margin-top:50px;
+    min-width: 824px;
     margin-bottom: 100px;
 }
 
@@ -202,6 +203,7 @@ hr {
 
 body {
     margin-bottom: 50px;
+    overflow: overlay;
 }
 
 .modal-buttons-div {
@@ -212,8 +214,42 @@ body {
     justify-content: flex-end;
 }
 
-.search{
+.search-element {
+    width: 800px;
+    margin-top: 10px;
+}
+
+.search-link {
+    text-decoration: none;
+    color: #263796;
+    font-size: 20px;
+}
+
+.search-input {
+    border: none;
+    width: 95%;
+    margin:0 0 0 5px;
+}
+
+.search-input {
+    outline: none;
+}
+
+.search-div{
     margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+}
+
+.search-span {
+    color: #9aa0a6;
+    height: 20px;
+    width: 20px;
+}
+
+.search-span>svg {
+    fill:currentColor;
 }
 
 .menu{
@@ -230,6 +266,16 @@ body {
     color: #263796;
 }
 
+.search-result {
+    margin-top: 80px;
+    width: 800px;
+}
+
+.search-no-result {
+    margin-top: 20px;
+    color: #999999;
+}
+
 .menu a:hover {
     background: #263796; color: #fff;
     border-radius: 8px;
@@ -243,4 +289,10 @@ body {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+::-webkit-scrollbar {width:5px}
+
+::-webkit-scrollbar-thumb {border-radius: 2px; background: #b6b6b6
+}
+::-webkit-scrollbar-track-piece {background: transparent}
 
