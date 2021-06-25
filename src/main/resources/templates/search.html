@@ -77,11 +77,7 @@
                     <div th:each="resultPage:${result}" style="transform: rotate(0);" class="search-result">
                         <a class="stretched-link search-link" th:href="@{'/page/'+ ${resultPage.getId()}}" th:text="${resultPage.getNamePage()}"></a>
                         <div th:if="${resultPage.getElements().size()!=0}">
-                            <video width="700px" class="search-element" muted="muted" controls loop th:if="${resultPage.getElements()[0].getType()=='video'}">
-                                <source th:src="${'../uploads/' + resultPage.getElements()[0].value}" type="video/mp4">
-                            </video>
-                            <img width="700px" class="search-element"  th:src="${'../uploads/' + resultPage.getElements()[0].value}" th:if="${resultPage.getElements()[0].getType()=='image'}">
-                            <div class="search-element text" th:utext="${resultPage.getElements()[0].value}" th:if="${resultPage.getElements()[0].getType()=='text'}">
+                            <div class="search-element text" th:utext="${resultPage.getElements()[0].value}">
                             </div>
                         </div>
                     </div>
