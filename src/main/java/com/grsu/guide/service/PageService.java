@@ -45,6 +45,10 @@ public class PageService {
         pageRepository.deleteById(getPage(id).get().getId());
     }
 
+    public void deleteAllChildPagesByParentId(Long id){
+        pageRepository.deletePagesByParentPageId(id);
+    }
+
     public List<Page> getPagesBySearchRequest(String searchRequest) {
         return pageRepository.findPagesByNamePageContains(searchRequest);
     }
