@@ -33,7 +33,7 @@
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                 <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#addModal">Add page</button></li>
                 <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editModal">Rename page</button></li>
-                <li th:if="${parentPages.size()>1}">
+                <li th:unless="${parentPages.size()==1 && page.getId()==parentPages[0].getId()}">
                     <form th:action="@{'/page/'+${page.getId()}+'/delete/'}" method="post">
                         <button type="submit" class="dropdown-item">Delete page</button>
                     </form>
@@ -149,13 +149,17 @@
             <div th:each="element, stat:${elements}">
                 <div class="element text" th:utext="${element.value}">
                 </div>
-                <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
-                    <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
-                        Edit
-                    </button>
-                    <input type="hidden" th:id="${element.getId()}"/>
-                    <button type="submit" class="common_button">Delete</button>
-                </form>
+                <div>
+                    <form class="inline_div" sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
+                        <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
+                            Edit
+                        </button>
+                        <input type="hidden" th:id="${element.getId()}"/>
+                        <button type="submit" class="common_button">Delete</button>
+
+                    </form>
+                    <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseSave'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseSave'+${stat.index}">Save as template</button>
+                </div>
                 <!--EDIT ELEMENT COLLAPSE-->
                 <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
                     <div class="card card-body">
@@ -165,6 +169,22 @@
                         </form>
                     </div>
                 </div>
+                <!--SAVE TEMPLATE COLLAPSE-->
+                <div class="collapse" th:id="'collapseSave'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/add_template'}" method="post">
+                        <div class="col-xs-4">
+                        <input class="form-control" name="name" id="textInput-temp"  placeholder="Template name">
+                        <input type="hidden" id="temp_id" name="id" th:value="${element.getId()}">
+                        <input class="common_button" type="submit" value="Add">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
+            <div class="col" >
+            </div>
+        </div>
+
             </div>
             </div>
             <div class="col" >
@@ -177,6 +197,19 @@
                 <button class="common_button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
                     Add element
                 </button>
+
+                <button class="dropdown dropdown-toggle common_button" type="button" id="dropdownMenu22" data-bs-toggle="dropdown" aria-expanded="false">
+                    Add template
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu22">
+                    <li th:each="template:${templates}">
+                        <form th:if="${templates!=null}" th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
+                            <input type="hidden" id="temp1" name="value" th:value="${template.getValue()}">
+                            <button class="dropdown-item" type="submit" th:text="${template.getName()}"></button>
+                        </form>
+                    </li>
+                </ul>
+
                 <div class="collapse" id="collapseAdd" sec:authorize="hasRole('ROLE_ADMIN')">
                     <div class="card card-body">
                         <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
