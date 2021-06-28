@@ -31,6 +31,8 @@
                 &#9776
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <li><span class="dropdown-item-text nav-dropdown-username" th:text="${#authentication.getName()}"></span></li>
+                <li><hr class="dropdown-divider"></li>
                 <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#addModal">Add page</button></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -75,7 +77,10 @@
                         No result
                     </div>
                     <div th:each="resultPage:${result}" style="transform: rotate(0);" class="search-result">
-                        <a class="stretched-link search-link" th:href="@{'/page/'+ ${resultPage.getId()}}" th:text="${resultPage.getNamePage()}"></a>
+                        <div style="background: #f3f3f3">
+                            <a class="stretched-link search-link" th:href="@{'/page/'+ ${resultPage.getId()}}" th:text="${resultPage.getNamePage()}"></a>
+                        </div>
+
                         <div th:if="${resultPage.getElements().size()!=0}">
                             <div class="search-element text" th:utext="${resultPage.getElements()[0].value}">
                             </div>

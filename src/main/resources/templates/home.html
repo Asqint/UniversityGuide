@@ -31,6 +31,8 @@
                 &#9776
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <li><span class="dropdown-item-text nav-dropdown-username" th:text="${#authentication.getName()}"></span></li>
+                <li><hr class="dropdown-divider"></li>
                 <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#addModal">Add page</button></li>
                 <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editModal">Rename page</button></li>
                 <li th:unless="${parentPages.size()==1 && page.getId()==parentPages[0].getId()}">
