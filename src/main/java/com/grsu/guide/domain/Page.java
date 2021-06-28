@@ -11,6 +11,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import java.util.Set;
 
 @Data
+@Table(name = "pages")
 @Entity
 public class Page {
 

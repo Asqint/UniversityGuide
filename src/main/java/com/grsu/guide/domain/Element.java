@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
+@Table(name = "elements")
 @Entity
 public class Element {
     @Id

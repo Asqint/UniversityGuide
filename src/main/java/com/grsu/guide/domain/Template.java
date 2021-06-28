@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
+@Table(name = "templates")
 @Entity
 public class Template {
     @Id

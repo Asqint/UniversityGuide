@@ -1,4 +1,4 @@
-insert into element (id, value, page_id)
+insert into elements (id, value, page_id)
     values (1, '<p><span style="color: #212529; font-family: arial, helvetica, sans-serif; font-size: 20px; background-color: #ffffff;"><strong>Yanka Kupala State University of Grodno</strong> is a young heart of Grodno, one of the most beautiful cities of Belarus. It''s a major regional University in Belarus. The present success of the University is deeply rooted into its past.</span></p>
 <ul>
 <li><span style="font-size: 20px; background-color: #ffffff; color: #212529; font-family: system-ui, -apple-system, ''Segoe UI'', Roboto, ''Helvetica Neue'', Arial, ''Noto Sans'', ''Liberation Sans'', sans-serif, ''Apple Color Emoji'', ''Segoe UI Emoji'', ''Segoe UI Symbol'', ''Noto Color Emoji'';">15 faculties</span></li>
@@ -9,14 +9,14 @@ insert into element (id, value, page_id)
 <p><span style="font-size: 20px; background-color: #ffffff; color: #212529; font-family: system-ui, -apple-system, ''Segoe UI'', Roboto, ''Helvetica Neue'', Arial, ''Noto Sans'', ''Liberation Sans'', sans-serif, ''Apple Color Emoji'', ''Segoe UI Emoji'', ''Segoe UI Symbol'', ''Noto Color Emoji'';">To learn more about education in Yanka Kupala State University of Grodno you can visit <a title="Study" href="2">Study</a> page.</span></p>
 <p>&nbsp;</p>', 1);
 
-insert into element (id, value, page_id)
+insert into elements (id, value, page_id)
 values (2, '<p><img src="../uploads/49cac684-cef4-45a0-9406-26adff0cbb9f.2016-06-22_11-44-25.jpg" alt="" width="800" height="534" /></p>', 1);
 
-insert into element (id, value, page_id)
+insert into elements (id, value, page_id)
 values (3, '<p><img src="../uploads/a9f17de5-af08-45ae-9b58-235f057f8f13.IMG_3600_4.jpg" alt="" width="800" height="533" /></p>
 <p><span style="color: rgba(0, 0, 0, 0.87); font-family: arial, helvetica, sans-serif; font-size: 14pt;">Yanka Kupala State University of Grodno is a major regional university complex in Belarus integrating all education levels. It&rsquo;s a big-scale scientific centre of the region, a classical type university acknowledged by the international community.</span></p>', 2);
 
-insert into element (id, value, page_id)
+insert into elements (id, value, page_id)
 values (4, '<p><span style="font-size: 14pt;"><span style="box-sizing: inherit; color: #2643df; font-family: Roboto, sans-serif;">Preparatory department for foreign citizens and stateless persons, temporarily staying (residing) on the territory of the Republic of Belarus</span><span style="color: #2643df; font-family: Roboto, sans-serif;">.</span></span></p>
 <table style="box-sizing: inherit; border-spacing: 0px; border: none; width: 784px; color: rgba(0, 0, 0, 0.87); font-family: Roboto, sans-serif; font-size: 15px; height: 582px;">
 <tbody style="box-sizing: inherit;">
@@ -99,7 +99,7 @@ values (4, '<p><span style="font-size: 14pt;"><span style="box-sizing: inherit; 
 </tbody>
 </table>', 3);
 
-insert into element (id, value, page_id)
+insert into elements (id, value, page_id)
 values (5, '<p style="box-sizing: inherit; color: rgba(0, 0, 0, 0.87); font-family: Roboto, sans-serif; font-size: 15px; margin-bottom: 0.0001pt; line-height: 13.5pt;"><span style="font-size: 14pt;"><strong><span style="box-sizing: inherit;">Postgraduate study in Yanka Kupala State University of Grodno is:</span></strong></span></p>
 <ul>
 <li style="box-sizing: inherit;">Training of scientific personnel of higher qualification since 1969</li>
@@ -123,7 +123,7 @@ values (5, '<p style="box-sizing: inherit; color: rgba(0, 0, 0, 0.87); font-fami
 <li>Employment in research and higher educational institutions of the Republic of Belarus</li>
 </ul>', 4);
 
-insert into element (id, value, page_id)
+insert into elements (id, value, page_id)
 values (6, '<p style="text-align: center;"><strong><span style="box-sizing: inherit; color: rgba(0, 0, 0, 0.87); font-family: Roboto, sans-serif; font-size: 15px; text-align: center;">List of specialties</span></strong><br style="box-sizing: inherit; color: rgba(0, 0, 0, 0.87); font-family: Roboto, sans-serif; font-size: 15px; text-align: center;" /><strong><span style="box-sizing: inherit; color: rgba(0, 0, 0, 0.87); font-family: Roboto, sans-serif; font-size: 15px; text-align: center;">of PhD Degree Program of Yanka Kupala State University of Grodno</span></strong></p>
 <table style="box-sizing: inherit; border-spacing: 0px; border: none; width: 875px; color: rgba(0, 0, 0, 0.87); font-family: Roboto, sans-serif; font-size: 15px; height: 1746px;" border="0" cellspacing="0" cellpadding="0">
 <tbody style="box-sizing: inherit;">

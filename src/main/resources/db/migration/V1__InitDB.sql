@@ -1,6 +1,6 @@
 create sequence hibernate_sequence start with 10 increment by 1;
 
-create table element (
+create table elements (
     id bigint not null,
     value varchar(max) not null,
     page_id bigint,
@@ -8,7 +8,7 @@ create table element (
     primary key (id)
 );
 
-create table template (
+create table templates (
     id bigint not null,
     name varchar(255),
     value varchar(max) not null,
@@ -16,18 +16,17 @@ create table template (
     primary key (id)
 );
 
-create table page (
+create table pages (
     id bigint not null,
     name_page varchar(255) not null,
     parent_page_id bigint,
     primary key (id)
 );
 
-create table usr (
+create table users (
     id bigint not null,
     user_name varchar(255),
     password varchar(255),
-    role varchar(255),
     primary key (id)
 );
 
@@ -39,6 +38,26 @@ create table feedback (
      primary key (id)
 );
 
-alter table element
-    add constraint element_page_fk
-    foreign key (page_id) references page;
+create table roles (
+    id bigint not null,
+    name varchar(255),
+    primary key (id)
+);
+
+create table users_roles (
+    users_id bigint not null,
+    roles_id bigint not null,
+    primary key (users_id, roles_id)
+);
+
+alter table elements
+    add constraint elements_pages_fk
+    foreign key (page_id) references pages;
+
+alter table users_roles
+    add constraint users_roles_roles_fk
+    foreign key (roles_id) references roles;
+
+alter table users_roles
+    add constraint users_roles_users_fk
+    foreign key (users_id) references users;

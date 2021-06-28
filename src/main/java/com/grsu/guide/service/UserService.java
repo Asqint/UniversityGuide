@@ -8,10 +8,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
 
     private final UserRepository userRepository;
 
@@ -25,4 +26,8 @@ public class UserService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return userRepository.findByUserName(s);
+    }
 }
