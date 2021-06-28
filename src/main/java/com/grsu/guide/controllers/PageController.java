@@ -51,8 +51,7 @@ public class PageController {
     public String getPage(@PathVariable Long pageId,
                           Principal user,
                           Model model){
-        Optional<Page> optionalPage = pageService.getPage(pageId);
-        Page page = optionalPage.get();
+        Page page = pageService.getPage(pageId).orElseGet(Page::new);
         if(page.getParentPageId()!=0L) {
             List<Page> hierarchyPages = (List<Page>) pageService.getHierarchyPages(page.getParentPageId());
             model.addAttribute("hierarchyPages", hierarchyPages);
@@ -75,7 +74,7 @@ public class PageController {
 
     @PostMapping("/page/{parentId}/add_child_page")
     public String addChildPage(@PathVariable Long parentId,
-                               @RequestParam String newNamePage){
+                               @RequestParam String newNamePage) {
         Page childPage = new Page();
         childPage.setNamePage(newNamePage);
         childPage.setParentPageId(parentId);
@@ -97,8 +96,7 @@ public class PageController {
     public String addTemplate(@RequestParam(required=false) Long id,
                               @RequestParam(required=false) String name,
                               Principal user) {
-        Optional<Element> optionalElement = elementService.getElement(id);
-        Element element = optionalElement.get();
+        Element element = elementService.getElement(id).orElseGet(Element::new);
         Template template = new Template(name,element.getValue(),userService.findUserByUserName(user.getName()).getId());
         templateService.addTemplate(template);
         return "redirect:/page/{pageId}";
@@ -109,8 +107,7 @@ public class PageController {
                              @PathVariable Long pageId,
                              Principal principal)
     {
-        Optional<Page> optionalPage = pageService.getPage(pageId);
-        Page page = optionalPage.get();
+        Page page = pageService.getPage(pageId).orElseGet(Page::new);
         Element element = new Element();
         element.setValue(value);
         element.setEditor("Added by "+principal.getName()+" - "+new Timestamp(System.currentTimeMillis()));
@@ -125,8 +122,7 @@ public class PageController {
     public String editPage(@RequestParam(required = false) String newNamePage,
                            @PathVariable Long pageId)
     {
-        Optional<Page> optionalPage = pageService.getPage(pageId);
-        Page page = optionalPage.get();
+        Page page = pageService.getPage(pageId).orElseGet(Page::new);
         page.setNamePage(newNamePage);
         pageService.addPage(page);
         return "redirect:/";
@@ -138,11 +134,9 @@ public class PageController {
                               @RequestParam(required = false) String value,
                               Principal principal)
     {
-        Optional<Page> optionalPage = pageService.getPage(pageId);
-        Optional<Element> optionalElement = elementService.getElement(id);
-        Element element = optionalElement.get();
+        Element element = elementService.getElement(id).orElseGet(Element::new);
+        Page page = pageService.getPage(pageId).orElseGet(Page::new);
         element.setValue(value);
-        Page page = optionalPage.get();
         element.setEditor("Edited by "+principal.getName()+" - "+new Timestamp(System.currentTimeMillis()));
         Set<Element> elements = page.getElements();
         elements.add(element);

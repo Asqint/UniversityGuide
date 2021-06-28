@@ -57,7 +57,7 @@ public class PageService {
         List<Page> hierarchyPages = new ArrayList<>();
         Page page;
         while(currentPageId!=0) {
-            page = getPage(currentPageId).orElseThrow(NullPointerException::new);
+            page = getPage(currentPageId).orElseGet(Page::new);
             hierarchyPages.add(page);
             currentPageId = page.getParentPageId();
         }
