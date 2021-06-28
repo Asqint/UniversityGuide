@@ -14,7 +14,7 @@ public interface PageRepository extends CrudRepository<Page,Long> {
 
     Optional<Page> findById(Long id);
 
-    List<Page> findPagesByNamePageContains(String namePageContains);
+    List<Page> findPagesByNamePageContainsIgnoreCase(String namePageContains);
 
     Iterable<Page> findPagesByParentPageId(Long id);
 

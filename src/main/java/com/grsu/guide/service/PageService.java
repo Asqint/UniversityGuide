@@ -50,7 +50,7 @@ public class PageService {
     }
 
     public List<Page> getPagesBySearchRequest(String searchRequest) {
-        return pageRepository.findPagesByNamePageContains(searchRequest);
+        return pageRepository.findPagesByNamePageContainsIgnoreCase(searchRequest);
     }
 
     public List<Page> getHierarchyPages(Long currentPageId) {
