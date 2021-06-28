@@ -312,6 +312,12 @@ body {
     display: inline-block;
 }
 
+.editor {
+    color: #999999;
+    font-style: italic;
+    margin-left: 20px;
+}
+
 ::-webkit-scrollbar {width:5px}
 
 ::-webkit-scrollbar-thumb {border-radius: 2px; background: #b6b6b6

@@ -4,15 +4,11 @@ import com.grsu.guide.domain.*;
 import com.grsu.guide.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.attribute.UserPrincipal;
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Controller
@@ -110,12 +106,14 @@ public class PageController {
 
     @PostMapping("/page/{pageId}/add_el")
     public String addElement(@RequestParam(required=false) String value,
-                             @PathVariable Long pageId)
+                             @PathVariable Long pageId,
+                             Principal principal)
     {
         Optional<Page> optionalPage = pageService.getPage(pageId);
         Page page = optionalPage.get();
         Element element = new Element();
         element.setValue(value);
+        element.setEditor("Added by "+principal.getName()+" - "+new Timestamp(System.currentTimeMillis()));
         Set<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
@@ -137,13 +135,15 @@ public class PageController {
     @PostMapping("/page/{pageId}/edit_el/{id}")
     public String editElement(@PathVariable Long id,
                               @PathVariable Long pageId,
-                              @RequestParam(required = false) String value)
+                              @RequestParam(required = false) String value,
+                              Principal principal)
     {
         Optional<Page> optionalPage = pageService.getPage(pageId);
         Optional<Element> optionalElement = elementService.getElement(id);
-        optionalElement.get().setValue(value);
-        Page page = optionalPage.get();
         Element element = optionalElement.get();
+        element.setValue(value);
+        Page page = optionalPage.get();
+        element.setEditor("Edited by "+principal.getName()+" - "+new Timestamp(System.currentTimeMillis()));
         Set<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);

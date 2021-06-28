@@ -16,7 +16,10 @@ public class Element {
     @Column(name = "value",length = 2048)
     private String value;
 
-    public Element(String type,String value){
+    @Column(name="editor")
+    private String editor;
+
+    public Element(String value){
         this.value = value;
     }
 

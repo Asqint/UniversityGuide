@@ -4,6 +4,7 @@ create table element (
     id bigint not null,
     value varchar(max) not null,
     page_id bigint,
+    editor varchar(255),
     primary key (id)
 );
 
