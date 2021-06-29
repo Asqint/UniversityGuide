@@ -23,9 +23,9 @@ public class PageService {
         return pageRepository.findById(id);
     }
 
-    public Iterable<Page> getAllChildPages(Long id) {return  pageRepository.findPagesByParentPageId(id);}
+    public List<Page> getAllChildPages(Long id) {return  pageRepository.findPagesByParentPageId(id);}
 
-    public Iterable<Page> getAllParentPages(Long id){
+    public List<Page> getAllParentPages(Long id){
         return pageRepository.findPagesByParentPageId(id);
     }
 

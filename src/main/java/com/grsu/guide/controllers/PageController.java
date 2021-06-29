@@ -42,7 +42,7 @@ public class PageController {
 
     @GetMapping("/")
         public String main(Model model){
-        List<Page> parentPages = (List<Page>) pageService.getAllParentPages(0L);
+        List<Page> parentPages = pageService.getAllParentPages(0L);
         Long pageId = parentPages.get(0).getId();
         return "redirect:/page/"+pageId;
     }
@@ -53,11 +53,11 @@ public class PageController {
                           Model model){
         Page page = pageService.getPage(pageId).orElseGet(Page::new);
         if(page.getParentPageId()!=0L) {
-            List<Page> hierarchyPages = (List<Page>) pageService.getHierarchyPages(page.getParentPageId());
+            List<Page> hierarchyPages = pageService.getHierarchyPages(page.getParentPageId());
             model.addAttribute("hierarchyPages", hierarchyPages);
         }
-        List<Page> parentPages = (List<Page>) pageService.getAllParentPages(0L);
-        List<Page> childPages = (List<Page>) pageService.getAllChildPages(pageId);
+        List<Page> parentPages = pageService.getAllParentPages(0L);
+        List<Page> childPages = pageService.getAllChildPages(pageId);
         List <Element> sortedList = new ArrayList<>(page.getElements());
         if(user != null){
             List<Template> templates = templateService.findAllTemplatesById(userService.findUserByUserName(user.getName()).getId());
@@ -99,6 +99,21 @@ public class PageController {
         Element element = elementService.getElement(id).orElseGet(Element::new);
         Template template = new Template(name,element.getValue(),userService.findUserByUserName(user.getName()).getId());
         templateService.addTemplate(template);
+        return "redirect:/page/{pageId}";
+    }
+
+    @PostMapping("/page/{pageId}/edit_template")
+    public String editTemplate(@RequestParam(required = false) Long id,
+                               @RequestParam(required = false) String name){
+        Template template = templateService.findById(id).orElseGet(Template::new);
+        template.setName(name);
+        templateService.addTemplate(template);
+        return "redirect:/page/{pageId}";
+    }
+
+    @PostMapping("/page/{pageId}/delete_template")
+    public String deleteTemplate(@RequestParam(required = false) Long id){
+        templateService.deleteTemplate(id);
         return "redirect:/page/{pageId}";
     }
 
@@ -147,7 +162,7 @@ public class PageController {
 
     @PostMapping("/page/{pageId}/delete")
     public String deletePage(@PathVariable Long pageId){
-        List<Page> childPages =  (List<Page>)pageService.getAllChildPages(pageId);
+        List<Page> childPages = pageService.getAllChildPages(pageId);
         if(childPages.size() != 0){
             pageService.deleteAllChildPagesByParentId(pageId);
         }
@@ -163,7 +178,7 @@ public class PageController {
 
     @GetMapping("/feedback")
     public String getFeedback(Model model) {
-        List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
+        List<Page> pages = pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
         return "feedback";
     }
@@ -174,7 +189,7 @@ public class PageController {
                            @RequestParam(required = false) String mail,
                            @RequestParam(required = false) String message,
                            Model model){
-        List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
+        List<Page> pages = pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
 
         Feedback feedback = new Feedback(name, mail, message);
@@ -202,7 +217,7 @@ public class PageController {
 
     @GetMapping("/search")
     public String getSearch(@RequestParam(required = false) String searchRequest, Model model) {
-        List<Page> pages = (List<Page>) pageService.getAllParentPages(0L);
+        List<Page> pages = pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
         if(searchRequest != null){
             List<Page> result = pageService.getPagesBySearchRequest(searchRequest);

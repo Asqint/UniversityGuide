@@ -9,6 +9,7 @@
           crossorigin="anonymous"
     >
     <link th:href="@{../css/style.css}" rel='stylesheet' >
+    <script ENGINE="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -176,40 +177,74 @@
                 <div class="collapse" th:id="'collapseSave'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
                     <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/add_template'}" method="post">
                         <div class="col-xs-4">
-                        <input class="form-control" name="name" id="textInput-temp"  placeholder="Template name">
-                        <input type="hidden" id="temp_id" name="id" th:value="${element.getId()}">
-                        <input class="common_button" type="submit" value="Add">
+                            <input class="form-control" name="name" id="textInput-temp"  placeholder="Template name" required>
+                            <input type="hidden" id="temp_id" name="id" th:value="${element.getId()}">
+                            <input class="common_button" type="submit" value="Add template">
                         </div>
                     </form>
                 </div>
             </div>
-            </div>
-            <div class="col" >
-            </div>
+                </div>
+                    <div class="col">
+                </div>
         </div>
-
             </div>
             </div>
-            <div class="col" >
-            </div>
+                <div class="col"></div>
         </div>
         <!--ADD ELEMENT COLLAPSE-->
         <div class="row justify-content-md-center"  sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="col"></div>
-            <div class="col-md add">
-                <button class="common_button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
+            <div  name="dropdown-menu"  id="element-collapse" class="col-md add">
+                <button  class="common_button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
                     Add element
                 </button>
-
-                <button class="dropdown dropdown-toggle common_button" type="button" id="dropdownMenu22" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="dropdown dropdown-toggle common_button" id="dropdownMenu22" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="dropdownMenu22">
                     Add template
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu22">
-                    <li th:each="template:${templates}">
-                        <form th:if="${templates!=null}" th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
+                <ul name="dropdown-menu"  class="dropdown-menu" aria-labelledby="dropdownMenu22">
+                    <li  th:each="template, stat:${templates}">
+                        <form th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
                             <input type="hidden" id="temp1" name="value" th:value="${template.getValue()}">
-                            <button class="dropdown-item" type="submit" th:text="${template.getName()}"></button>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button class="dropdown-item" type="submit" th:text="${template.getName()}"></button>
+                                <form th:action="@{'/page/'+ ${page.getId()} +'/edit_template'}" method="post">
+                                    <button onclick="event.stopPropagation()" type="button" name="editTemp" class="delete-edit-button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEditTemplate'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEditTemplate'+${stat.index}" >
+                                        <span class="delete-edit-span" style="width: 20px;height: 20px">
+                                        <svg class="delete-span" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 25 25" version="1.1">
+                                            <g id="surface1">
+                                                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 15.542969 4.210938 L 20.628906 9.296875 L 7.757812 22.167969 L 2.675781 17.082031 Z M 24.484375 2.984375 L 22.21875 0.71875 C 21.339844 -0.15625 19.917969 -0.15625 19.039062 0.71875 L 16.867188 2.890625 L 21.953125 7.976562 L 24.484375 5.441406 C 25.164062 4.761719 25.164062 3.664062 24.484375 2.984375 Z M 0.015625 24.230469 C -0.078125 24.644531 0.296875 25.019531 0.714844 24.917969 L 6.378906 23.542969 L 1.296875 18.460938 Z M 0.015625 24.230469 "/>
+                                            </g>
+                                       </svg>
+                                    </span>
+                                    </button>
+                                </form>
+                                <form th:action="@{'/page/'+ ${page.getId()} +'/delete_template'}" method="post">
+                                    <input type="hidden" id="delete_temp_id" name="id" th:value="${template.getId()}">
+                                    <button  type="submit" name="deleteTemp" class="delete-edit-button">
+                                        <span class="delete-edit-span" style="width: 20px;height: 20px">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 25 25" version="1.1">
+                                            <g id="surface1">
+                                                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 12.5 25 C 5.605469 25 0 19.394531 0 12.5 C 0 5.605469 5.605469 0 12.5 0 C 19.394531 0 25 5.605469 25 12.5 C 25 19.394531 19.394531 25 12.5 25 Z M 12.5 1.785156 C 6.59375 1.785156 1.785156 6.59375 1.785156 12.5 C 1.785156 18.40625 6.59375 23.214844 12.5 23.214844 C 18.40625 23.214844 23.214844 18.40625 23.214844 12.5 C 23.214844 6.59375 18.40625 1.785156 12.5 1.785156 Z M 12.5 1.785156 "/>
+                                                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 16.964844 17.855469 C 16.734375 17.855469 16.507812 17.769531 16.332031 17.59375 L 7.40625 8.667969 C 7.054688 8.316406 7.054688 7.753906 7.40625 7.40625 C 7.753906 7.054688 8.316406 7.054688 8.667969 7.40625 L 17.59375 16.332031 C 17.945312 16.683594 17.945312 17.246094 17.59375 17.59375 C 17.421875 17.769531 17.191406 17.855469 16.964844 17.855469 Z M 16.964844 17.855469 "/>
+                                                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 8.035156 17.855469 C 7.808594 17.855469 7.578125 17.769531 7.40625 17.59375 C 7.054688 17.246094 7.054688 16.683594 7.40625 16.332031 L 16.332031 7.40625 C 16.683594 7.054688 17.246094 7.054688 17.59375 7.40625 C 17.945312 7.753906 17.945312 8.316406 17.59375 8.667969 L 8.667969 17.59375 C 8.492188 17.769531 8.265625 17.855469 8.035156 17.855469 Z M 8.035156 17.855469 "/>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="collapse" th:aria-labelledby="'collapseEditTemplate'+${stat.index}" th:id="'collapseEditTemplate'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                                <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/edit_template'}" method="post">
+                                    <div class="col-xs-4">
+                                        <input class="form-control" name="name" id="textInput-editTemp"  placeholder="Template name">
+                                        <input type="hidden" id="edit_temp_id" name="id" th:value="${template.getId()}">
+                                        <input class="common_button" type="submit" value="Rename template">
+                                    </div>
+                                </form>
+                            </div>
                         </form>
+
                     </li>
                 </ul>
 
@@ -264,6 +299,10 @@
                 input.click();
             }
         });
+
+        $("dropdown-menu").click(function(e){
+            e.stopPropagation();
+        })
     </script>
 </body>
 </html>

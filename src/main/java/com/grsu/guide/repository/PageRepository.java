@@ -16,7 +16,7 @@ public interface PageRepository extends CrudRepository<Page,Long> {
 
     List<Page> findPagesByNamePageContainsIgnoreCase(String namePageContains);
 
-    Iterable<Page> findPagesByParentPageId(Long id);
+    List<Page> findPagesByParentPageId(Long id);
 
     void deletePagesByParentPageId(Long aLong);
 }
