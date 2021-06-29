@@ -126,7 +126,7 @@ public class PageController {
         Element element = new Element();
         element.setValue(value);
         element.setEditor("Added by "+principal.getName()+" - "+new Timestamp(System.currentTimeMillis()));
-        Set<Element> elements = page.getElements();
+        List<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
         pageService.addPage(page);
@@ -153,7 +153,7 @@ public class PageController {
         Page page = pageService.getPage(pageId).orElseGet(Page::new);
         element.setValue(value);
         element.setEditor("Edited by "+principal.getName()+" - "+new Timestamp(System.currentTimeMillis()));
-        Set<Element> elements = page.getElements();
+        List<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
         pageService.addPage(page);

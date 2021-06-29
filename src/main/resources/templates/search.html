@@ -82,7 +82,7 @@
                         </div>
 
                         <div th:if="${resultPage.getElements().size()!=0}">
-                            <div class="search-element text" th:utext="${resultPage.getElements()[0].value}">
+                            <div class="search-element text" th:utext="${resultPage.getElements().get(0).value}">
                             </div>
                         </div>
                     </div>
