@@ -28,7 +28,7 @@
             <a th:href="@{/search}" class="nav-link nav-link-add">Search</a>
         </li>
         <div class="nav-button-div">
-            <button sec:authorize="hasRole('ROLE_ADMIN')" class="nav-dropdown-button" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <button sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" class="nav-dropdown-button" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
                 &#9776
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
@@ -40,6 +40,7 @@
                     <form th:action="@{'/page/'+${page.getId()}+'/delete/'}" method="post">
                         <button type="submit" class="dropdown-item">Delete page</button>
                     </form>
+                <li><a class="dropdown-item" th:href="@{/users}">Users</a></li>
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -142,7 +143,7 @@
                             </ui>
                         </nav>
                     </div>
-                        <button type="button" class="common_button" data-bs-toggle="modal" data-bs-target="#addChildModal" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <button type="button" class="common_button" data-bs-toggle="modal" data-bs-target="#addChildModal" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
                             Add child page
                         </button>
             </div>
@@ -153,7 +154,7 @@
                 <div class="element text" th:utext="${element.value}">
                 </div>
                 <div>
-                    <form class="inline_div" sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
+                    <form class="inline_div" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
                         <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
                             Edit
                         </button>
@@ -161,11 +162,11 @@
                         <button type="submit" class="common_button">Delete</button>
 
                     </form>
-                    <button sec:authorize="hasRole('ROLE_ADMIN')" class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseSave'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseSave'+${stat.index}">Save as template</button>
-                    <span class="editor" sec:authorize="hasRole('ROLE_ADMIN')" th:if="${element.getEditor()!=null}" th:text="${element.getEditor()}"></span>
+                    <button sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseSave'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseSave'+${stat.index}">Save as template</button>
+                    <span class="editor" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" th:if="${element.getEditor()!=null}" th:text="${element.getEditor()}"></span>
                 </div>
                 <!--EDIT ELEMENT COLLAPSE-->
-                <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
                     <div class="card card-body">
                         <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/'+${element.getId()}}" method="post">
                             <textarea class="editor_txt" th:utext="${element.getValue()}" name="value" id="elementEditInput" rows="3"></textarea>
@@ -174,7 +175,7 @@
                     </div>
                 </div>
                 <!--SAVE TEMPLATE COLLAPSE-->
-                <div class="collapse" th:id="'collapseSave'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="collapse" th:id="'collapseSave'+${stat.index}" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
                     <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/add_template'}" method="post">
                         <div class="col-xs-4">
                             <input class="form-control" name="name" id="textInput-temp"  placeholder="Template name" required>
@@ -193,7 +194,7 @@
                 <div class="col"></div>
         </div>
         <!--ADD ELEMENT COLLAPSE-->
-        <div class="row justify-content-md-center"  sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="row justify-content-md-center"  sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
             <div class="col"></div>
             <div  name="dropdown-menu"  id="element-collapse" class="col-md add">
                 <button  class="common_button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
@@ -234,7 +235,7 @@
                                     </button>
                                 </form>
                             </div>
-                            <div class="collapse" th:aria-labelledby="'collapseEditTemplate'+${stat.index}" th:id="'collapseEditTemplate'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div class="collapse" th:aria-labelledby="'collapseEditTemplate'+${stat.index}" th:id="'collapseEditTemplate'+${stat.index}" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
                                 <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/edit_template'}" method="post">
                                     <div class="col-xs-4">
                                         <input class="form-control" name="name" id="textInput-editTemp"  placeholder="Template name">
@@ -248,7 +249,7 @@
                     </li>
                 </ul>
 
-                <div class="collapse" id="collapseAdd" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="collapse" id="collapseAdd" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
                     <div class="card card-body">
                         <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/add_el'}" method="post">
                             <textarea class="editor_txt" name="value" id="elementAddInput" rows="3"></textarea>
