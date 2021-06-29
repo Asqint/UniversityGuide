@@ -248,6 +248,10 @@ body {
     font-weight: bold;
 }
 
+.username-bold {
+    font-weight: bold;
+}
+
 .search-input {
     border: none;
     width: 95%;
