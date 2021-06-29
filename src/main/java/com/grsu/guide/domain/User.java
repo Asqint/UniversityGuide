@@ -3,6 +3,7 @@ package com.grsu.guide.domain;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,11 +31,12 @@ public class User implements UserDetails {
     private String password;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
 
-    public User(String name,String password, String role){
+    public User(String name,String password){
         this.userName = name;
         this.password = password;
 
