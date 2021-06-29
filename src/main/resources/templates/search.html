@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+<!DOCTYPE html  >
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="">
-<head>
+<head >
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>GRSU Guide</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -27,13 +27,14 @@
             <a th:href="@{/search}" class="nav-link nav-link-add">Search</a>
         </li>
         <div class="nav-button-div">
-            <button sec:authorize="hasRole('ROLE_ADMIN')" class="nav-dropdown-button" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <button sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" class="nav-dropdown-button" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
                 &#9776
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                 <li><span class="dropdown-item-text nav-dropdown-username" th:text="${#authentication.getName()}"></span></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#addModal">Add page</button></li>
+                <li><a class="dropdown-item" th:href="@{/users}">Users</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
             </ul>
