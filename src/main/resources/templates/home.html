@@ -134,65 +134,61 @@
         <!--SIDE MENU-->
         <div class="row justify-content-md-center">
             <div class="col">
-                    <div>
-                        <nav class="menu_border sidebar card py" th:if="${childPages.size() !=0}">
-                            <ui class="menu nav flex-column">
-                                <li class="nav-item" th:each="pageN:${childPages}">
-                                    <a th:href="@{'/page/'+${pageN.getId()}}" class="nav-link" th:text="${pageN.getNamePage()}"></a>
-                                </li>
-                            </ui>
-                        </nav>
-                    </div>
-                        <button type="button" class="common_button" data-bs-toggle="modal" data-bs-target="#addChildModal" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
-                            Add child page
-                        </button>
-            </div>
-        <div class="col-md">
-
-            <!--ELEMENT-->
-            <div th:each="element, stat:${elements}">
-                <div class="element text" th:utext="${element.value}">
-                </div>
                 <div>
-                    <form class="inline_div" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
-                        <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
-                            Edit
-                        </button>
-                        <input type="hidden" th:id="${element.getId()}"/>
-                        <button type="submit" class="common_button">Delete</button>
-
-                    </form>
-                    <button sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseSave'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseSave'+${stat.index}">Save as template</button>
-                    <span class="editor" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" th:if="${element.getEditor()!=null}" th:text="${element.getEditor()}"></span>
+                    <nav class="menu_border sidebar card py" th:if="${childPages.size() !=0}">
+                        <ui class="menu nav flex-column">
+                            <li class="nav-item" th:each="pageN:${childPages}">
+                                <a th:href="@{'/page/'+${pageN.getId()}}" class="nav-link" th:text="${pageN.getNamePage()}"></a>
+                            </li>
+                        </ui>
+                    </nav>
                 </div>
-                <!--EDIT ELEMENT COLLAPSE-->
-                <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
-                    <div class="card card-body">
-                        <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/'+${element.getId()}}" method="post">
-                            <textarea class="editor_txt" th:utext="${element.getValue()}" name="value" id="elementEditInput" rows="3"></textarea>
-                            <input class="common_button" type="submit" value="Save">
+                    <button type="button" class="common_button" data-bs-toggle="modal" data-bs-target="#addChildModal" sec:authorize="hasRole('ROLE_ADMIN')">
+                        Add child page
+                    </button>
+            </div>
+            <div class="col-md">
+                <!--ELEMENT-->
+                <div th:each="element, stat:${elements}">
+                    <div class="element text" th:utext="${element.value}">
+                    </div>
+                    <div>
+                        <form class="inline_div" sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{'/page/'+ ${page.getId()} +'/delete_el/' + ${element.getId()}}" method="post">
+                            <button class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseEdit'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseEdit'+${stat.index}">
+                                Edit
+                            </button>
+                            <input type="hidden" th:id="${element.getId()}"/>
+                            <button type="submit" class="common_button">Delete</button>
+
+                        </form>
+                        <button sec:authorize="hasRole('ROLE_ADMIN')" class="common_button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseSave'+${stat.index}" aria-expanded="false" th:aria-controls="'collapseSave'+${stat.index}">Save as template</button>
+                        <span class="editor" sec:authorize="hasRole('ROLE_ADMIN')" th:if="${element.getEditor()!=null}" th:text="${element.getEditor()}"></span>
+                    </div>
+                    <!--EDIT ELEMENT COLLAPSE-->
+                    <div class="collapse" th:id="'collapseEdit'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="card card-body">
+                            <form enctype="multipart/form-data" th:action="@{'/page/'+ ${page.getId()} +'/edit_el/'+${element.getId()}}" method="post">
+                                <textarea class="editor_txt" th:utext="${element.getValue()}" name="value" id="elementEditInput" rows="3"></textarea>
+                                <input class="common_button" type="submit" value="Save">
+                            </form>
+                        </div>
+                    </div>
+                    <!--SAVE TEMPLATE COLLAPSE-->
+                    <div class="collapse" th:id="'collapseSave'+${stat.index}" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/add_template'}" method="post">
+                            <div class="col-xs-4">
+                                <input class="form-control" name="name" id="textInput-temp"  placeholder="Template name" required>
+                                <input type="hidden" id="temp_id" name="id" th:value="${element.getId()}">
+                                <input class="common_button" type="submit" value="Add template">
+                            </div>
                         </form>
                     </div>
                 </div>
-                <!--SAVE TEMPLATE COLLAPSE-->
-                <div class="collapse" th:id="'collapseSave'+${stat.index}" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
-                    <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/add_template'}" method="post">
-                        <div class="col-xs-4">
-                            <input class="form-control" name="name" id="textInput-temp"  placeholder="Template name" required>
-                            <input type="hidden" id="temp_id" name="id" th:value="${element.getId()}">
-                            <input class="common_button" type="submit" value="Add template">
-                        </div>
-                    </form>
-                </div>
             </div>
-                </div>
-                    <div class="col">
-                </div>
+            <div class="col">
+            </div>
         </div>
-            </div>
-            </div>
-                <div class="col"></div>
-        </div>
+        <div class="col"></div>
         <!--ADD ELEMENT COLLAPSE-->
         <div class="row justify-content-md-center"  sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
             <div class="col"></div>

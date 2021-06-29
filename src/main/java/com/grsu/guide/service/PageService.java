@@ -30,14 +30,6 @@ public class PageService {
     }
 
     public void addPage(Page page){
-
-        if(page.getElements()!=null) {
-            for (Element newElement : page.getElements()) {
-                page.getElements().add(newElement);
-            }
-            page.setElements(page.getElements());
-        }
-
         pageRepository.save(page);
     }
 
