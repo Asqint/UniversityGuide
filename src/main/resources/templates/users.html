@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>GRSU Guide</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+        crossorigin="anonymous"
+  >
+  <link th:href="@{css/style.css}" rel='stylesheet'>
+  <script ENGINE="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<!--NAVBAR-->
+<ul class="nav nav-pills nav-justified">
+  <a class="logo" th:href="@{'/page/'+ ${pages[0].getId()}}">
+    <img th:src="@{img/grsu.png}" alt="logo.png" width="80" height="80">
+  </a>
+  <li class="nav-item" th:each="pageN:${pages}">
+    <a th:href="@{'/page/'+ ${pageN.getId()}}" class="nav-link nav-link-add " th:text="${pageN.getNamePage()}"></a>
+  </li>
+  <li class="nav-item">
+    <a th:href="@{/feedback}" class="nav-link nav-link-add">Feedback</a>
+  </li>
+  <li class="nav-item">
+    <a th:href="@{/search}" class="nav-link nav-link-add">Search</a>
+  </li>
+  <div class="nav-button-div">
+    <button sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')" class="nav-dropdown-button" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+      &#9776
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+      <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#addModal">Add page</button></li>
+      <li><a class="dropdown-item" th:href="@{/users}">Users</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+    </ul>
+  </div>
+</ul>
+
+<!--ADD PAGE MODAL-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form th:action="@{/add}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Add page</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" required name="newNamePage" class="form-control" id="pageNameInput" placeholder="Page Name">
+        </div>
+        <div class="modal-buttons-div">
+          <button type="submit" class="common_button">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--ADD USER MODAL-->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form th:action="@{/add_user}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add new user</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input  type="text" required name="username" class="form-control input_line" id="userNameInput" placeholder="User Name">
+          <input type="password" required name="password" class="form-control input_line" id="passwordInput" placeholder="Password">
+          <select class="form-select input_line" name="role" size="1" required>
+            <option selected="selected"  disabled>Chose role</option>
+            <option value="ROLE_ADMIN">Admin</option>
+            <option value="ROLE_EDITOR">Editor</option>
+          </select>
+        </div>
+        <div class="modal-buttons-div">
+          <button type="submit" class="common_button">Add user</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!--EDIT USER MODAL-->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form th:action="@{/edit_user}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit user</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input  type="hidden" name="id" id="idUser">
+          <input  type="text" required name="username" class="form-control input_line" id="newUserNameInput" placeholder="New User Name">
+          <input type="password" required name="password" class="form-control input_line" id="newPasswordInput" placeholder="New Password">
+          <select class="form-select input_line" name="role" size="1" required>
+            <option selected="selected"  name="role" disabled>Chose role</option>
+            <option value="ROLE_ADMIN">Admin</option>
+            <option value="ROLE_EDITOR">Editor</option>
+          </select>
+        </div>
+        <div class="modal-buttons-div">
+          <button type="submit" class="common_button">Edit user</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="container" id="page-container">
+    <div class="row justify-content-md-center">
+      <div class="col"></div>
+        <div class="col-md">
+          <div class="row justify-content-md-center">
+            <div  class="col-4">
+              <h1 style="text-align: center;margin: 0" th:text="Username"></h1>
+            </div>
+            <div class="col-4">
+              <h1 style="text-align: center;margin: 0"  th:text="Role"></h1>
+            </div>
+            <div class="col">
+            </div>
+          </div>
+          <div  th:each="user,stat:${users}" class="row justify-content-md-center">
+            <div  class="col-4">
+              <div>
+                <div style="text-align: center;margin: 0" class="username-bold" th:utext="${user.getUsername()}"></div>
+              </div>
+            </div>
+            <div th:each="role:${user.getRoles()}" class="col-4">
+              <div style="text-align: center;margin: 0" class="username-bold" th:utext="${role.getName() == 'ROLE_ADMIN'} ? ${'Admin'} : ${'Editor'}"></div>
+            </div>
+            <div class="col">
+              <form th:action="@{/delete_user}" method="post">
+                <input type="hidden" name="id" th:value="${user.getId()}">
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                  <button class="common_button" id="edit-user" th:data-id="${user.getId()}" type="button" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit user</button>
+                  <button th:if="${users.size() > 1 && !user.getUsername().equals(#authentication.getName())}" class="common_button">Delete user</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col">
+              <div>
+                <button sec:authorize="hasRole('ROLE_ADMIN')" class="common_button" data-bs-toggle="modal" data-bs-target="#addUserModal">Add new user</button>
+              </div>
+          </div>
+        </div>
+      <div class="col"></div>
+</div>
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous">
+  </script>
+  <script>
+    $(function() {
+      $(".btn").click(
+              function() {
+                let id = $(this).attr('data-id');
+                $("#idUser").attr('value', id);
+              })
+    });
+  </script>
+</body>
+</html>
