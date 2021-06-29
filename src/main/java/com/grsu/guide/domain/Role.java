@@ -2,6 +2,7 @@ package com.grsu.guide.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ public class Role implements GrantedAuthority {
     private String name;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
@@ -31,8 +33,11 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
-    public Role(Long id, String name) {
-        this.id = id;
+    public Role(String name) {
+        if(name.equals("ROLE_ADMIN")) {
+            this.id = 1L;
+        }
+        else this.id = 2L;
         this.name = name;
     }
 
