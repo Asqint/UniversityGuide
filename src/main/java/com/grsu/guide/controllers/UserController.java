@@ -29,35 +29,38 @@ public class UserController {
     private String getUsers(Model model){
         List<Page> pages =  pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
+        model.addAttribute("errorName", false);
         model.addAttribute("users", userService.findAllUsers());
         return "users";
     }
 
     @PostMapping("/add_user")
-    private String addUser(@RequestParam String username,
-                           @RequestParam String password,
-                           @RequestParam String role){
-        User user = new User();
-        user.setRoles(Collections.singleton(new Role(role)));
-        user.setUserName(username);
-        user.setPassword(password);
-        userService.saveUser(user);
-        return "redirect:/users";
-    }
-
-    @PostMapping("/edit_user")
-    public String editUser(@RequestParam String username,
+    private String saveUser(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String role,
-                           @RequestParam Long id){
+                           @RequestParam(required = false) Long id,
+                           Model model){
+        List<Page> pages =  pageService.getAllParentPages(0L);
+        model.addAttribute("pages", pages);
+        model.addAttribute("users", userService.findAllUsers());
+
+        if(userService.findUserByUserName(username).getUsername() != null){
+            model.addAttribute("errorName",true);
+
+            return "users";
+        }
         User user = new User();
-        user.setId(id);
+        if(id != null){
+            user.setId(id);
+        }
         user.setRoles(Collections.singleton(new Role(role)));
         user.setUserName(username);
         user.setPassword(password);
         userService.saveUser(user);
-        return "redirect:/users";
+
+        return "users";
     }
+
 
     @PostMapping("/delete_user")
     public String deleteUser(@RequestParam Long id){
