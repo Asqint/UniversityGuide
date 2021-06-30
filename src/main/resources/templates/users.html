@@ -64,12 +64,13 @@
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form th:action="@{/add_user}" method="post">
+      <form th:action="@{/save_user}" method="post">
         <div class="modal-header">
           <h5 class="modal-title" id="addUserModalLabel">Add new user</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <input  type="hidden" name="isAdd" value="true">
           <input  type="text" required name="username" class="form-control input_line" id="userNameInput" placeholder="User Name">
           <input type="password" required name="password" class="form-control input_line" id="passwordInput" placeholder="Password">
           <select class="form-select input_line" name="role" size="1" required>
@@ -80,34 +81,6 @@
         </div>
         <div class="modal-buttons-div">
           <button type="submit" class="common_button">Add user</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-<!--EDIT USER MODAL-->
-<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form th:action="@{/edit_user}" method="post">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editUserModalLabel">Edit user</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <input  type="hidden" name="id" id="idUser">
-          <input  type="text" required name="username" class="form-control input_line" id="newUserNameInput" placeholder="New User Name">
-          <input type="password" required name="password" class="form-control input_line" id="newPasswordInput" placeholder="New Password">
-          <select class="form-select input_line" name="role" size="1" required>
-            <option value="" selected disabled>Chose role</option>
-            <option value="ROLE_ADMIN">Admin</option>
-            <option value="ROLE_EDITOR">Editor</option>
-          </select>
-        </div>
-        <div class="modal-buttons-div">
-          <button type="submit" class="common_button">Edit user</button>
         </div>
       </form>
     </div>
@@ -132,7 +105,7 @@
           <div  th:each="user,stat:${users}" class="row justify-content-md-center">
             <div  class="col-4">
               <div>
-                <div style="text-align: center;margin: 0" class="username-bold" th:utext="${user.getUsername()}"></div>
+                <div style="text-align: center;margin: 0" th:data-name="${user.getUsername()}" class="username-size" th:utext="${user.getUsername()}"></div>
               </div>
             </div>
             <div th:each="role:${user.getRoles()}" class="col-4">
@@ -142,16 +115,49 @@
               <form th:action="@{/delete_user}" method="post">
                 <input type="hidden" name="id" th:value="${user.getId()}">
                 <div sec:authorize="hasRole('ROLE_ADMIN')">
-                  <button class="common_button" th:data-id="${user.getId()}" type="button" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit user</button>
+                  <button class="common_button" type="button" data-bs-toggle="modal" th:data-bs-target="'#editUserModal'+ ${stat.index}">Edit user</button>
                   <button th:if="${users.size() > 1 && !user.getUsername().equals(#authentication.getName())}" class="common_button">Delete user</button>
                 </div>
               </form>
             </div>
+
+            <!--EDIT USER MODAL-->
+            <div class="modal fade" th:id="'editUserModal' + ${stat.index}" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <form th:action="@{/save_user}" method="post">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editUserModalLabel">Edit user</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <input  type="hidden" name="id" id="idUser" th:value="${user.getId()}">
+                      <input  type="hidden" name="isAdd" value="false">
+                      <input  type="text" required name="username" class="form-control input_line" id="newUserNameInput" placeholder="New User Name">
+                      <input type="password" required name="password" class="form-control input_line" id="newPasswordInput" placeholder="New Password">
+                      <select th:if="${user.getUsername() != (#authentication.getName())}" class="form-select input_line" name="role" size="1" required>
+                        <option value="" selected disabled>Chose role</option>
+                        <option value="ROLE_ADMIN">Admin</option>
+                        <option value="ROLE_EDITOR">Editor</option>
+                      </select>
+                    </div>
+                    <div class="modal-buttons-div">
+                      <button type="submit" class="common_button">Edit user</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+
           </div>
           <div class="col">
               <div>
                 <button sec:authorize="hasRole('ROLE_ADMIN')" class="common_button" data-bs-toggle="modal" data-bs-target="#addUserModal">Add new user</button>
               </div>
+            <div style="margin-top: 20px" class="alert alert-danger" role="alert" th:if="${errorName}">
+              Username exists
+            </div>
           </div>
         </div>
       <div class="col"></div>
@@ -162,12 +168,9 @@
           crossorigin="anonymous">
   </script>
   <script>
-    $(function() {
-      $(".common_button").click(
-              function() {
-                let id = $(this).attr('data-id');
-                $("#idUser").attr('value', id);
-              })
+
+    $(".alert").delay(4000).slideUp(200, function() {
+      $(this).alert('close');
     });
   </script>
 </body>
