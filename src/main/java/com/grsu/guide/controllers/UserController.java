@@ -34,30 +34,30 @@ public class UserController {
         return "users";
     }
 
-    @PostMapping("/add_user")
+    @PostMapping("/save_user")
     private String saveUser(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String role,
+                           @RequestParam boolean isAdd,
                            @RequestParam(required = false) Long id,
                            Model model){
+        if(userService.findUserByUserName(username) != null && isAdd){
+            model.addAttribute("errorName",true);
+        }
+        else {
+            User user = new User();
+            if (id != null) {
+                user.setId(id);
+            }
+            user.setRoles(Collections.singleton(new Role(role)));
+            user.setUserName(username);
+            user.setPassword(password);
+            userService.saveUser(user);
+        }
+
         List<Page> pages =  pageService.getAllParentPages(0L);
         model.addAttribute("pages", pages);
         model.addAttribute("users", userService.findAllUsers());
-
-        if(userService.findUserByUserName(username).getUsername() != null){
-            model.addAttribute("errorName",true);
-
-            return "users";
-        }
-        User user = new User();
-        if(id != null){
-            user.setId(id);
-        }
-        user.setRoles(Collections.singleton(new Role(role)));
-        user.setUserName(username);
-        user.setPassword(password);
-        userService.saveUser(user);
-
         return "users";
     }
 
