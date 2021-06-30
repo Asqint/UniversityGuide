@@ -29,16 +29,31 @@ public class PageService {
         return pageRepository.findPagesByParentPageId(id);
     }
 
-    public void addPage(Page page){
+    public void savePage(Page page){
         pageRepository.save(page);
     }
 
-    public void deletePage(Long id){
-        pageRepository.deleteById(getPage(id).get().getId());
-    }
-
-    public void deleteAllChildPagesByParentId(Long id){
-        pageRepository.deletePagesByParentPageId(id);
+    public boolean deletePage(Long id){
+        List<Page> childPages = getAllChildPages(id);
+        if (childPages.isEmpty()) {
+            pageRepository.deleteById(id);
+            return true;
+        }
+        else {
+            Page page = getPage(id).orElseGet(Page::new);
+            if(page.getParentPageId()!=0L) {
+                Long pageParentPageId = page.getParentPageId();
+                for (Page childPage:childPages) {
+                    childPage.setParentPageId(pageParentPageId);
+                    savePage(childPage);
+                }
+                pageRepository.deleteById(id);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
     }
 
     public List<Page> getPagesBySearchRequest(String searchRequest) {

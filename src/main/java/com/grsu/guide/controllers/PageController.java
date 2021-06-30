@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.*;
@@ -50,7 +52,8 @@ public class PageController {
     @GetMapping("/page/{pageId}")
     public String getPage(@PathVariable Long pageId,
                           Principal user,
-                          Model model){
+                          Model model,
+                          @RequestParam(required = false) boolean rootPage){
         Page page = pageService.getPage(pageId).orElseGet(Page::new);
         if(page.getParentPageId()!=0L) {
             List<Page> hierarchyPages = pageService.getHierarchyPages(page.getParentPageId());
@@ -64,6 +67,9 @@ public class PageController {
             model.addAttribute("templates", templates);
         }
         sortedList.sort(Comparator.comparing(Element::getId));
+        if (rootPage) {
+            model.addAttribute("rootPage",true);
+        }
         model.addAttribute("elements",sortedList );
         model.addAttribute("parentPages", parentPages);
         model.addAttribute("childPages", childPages);
@@ -78,7 +84,7 @@ public class PageController {
         Page childPage = new Page();
         childPage.setNamePage(newNamePage);
         childPage.setParentPageId(parentId);
-        pageService.addPage(childPage);
+        pageService.savePage(childPage);
         return "redirect:/page/{parentId}";
     }
 
@@ -88,7 +94,7 @@ public class PageController {
         Page page = new Page();
         page.setNamePage(newNamePage);
         page.setParentPageId(0L);
-        pageService.addPage(page);
+        pageService.savePage(page);
         return "redirect:/";
     }
 
@@ -129,7 +135,7 @@ public class PageController {
         List<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
-        pageService.addPage(page);
+        pageService.savePage(page);
         return "redirect:/page/{pageId}";
     }
 
@@ -139,7 +145,7 @@ public class PageController {
     {
         Page page = pageService.getPage(pageId).orElseGet(Page::new);
         page.setNamePage(newNamePage);
-        pageService.addPage(page);
+        pageService.savePage(page);
         return "redirect:/";
     }
 
@@ -156,17 +162,16 @@ public class PageController {
         List<Element> elements = page.getElements();
         elements.add(element);
         page.setElements(elements);
-        pageService.addPage(page);
+        pageService.savePage(page);
         return "redirect:/page/{pageId}";
     }
 
     @PostMapping("/page/{pageId}/delete")
-    public String deletePage(@PathVariable Long pageId){
-        List<Page> childPages = pageService.getAllChildPages(pageId);
-        if(childPages.size() != 0){
-            pageService.deleteAllChildPagesByParentId(pageId);
+    public String deletePage(@PathVariable Long pageId, RedirectAttributes redirectAttributes){
+        if(!pageService.deletePage(pageId)){
+            redirectAttributes.addFlashAttribute("rootPage",true);
+            return "redirect:/page/{pageId}";
         }
-        pageService.deletePage(pageId);
         return "redirect:/";
     }
 
