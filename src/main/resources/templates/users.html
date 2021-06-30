@@ -142,7 +142,7 @@
               <form th:action="@{/delete_user}" method="post">
                 <input type="hidden" name="id" th:value="${user.getId()}">
                 <div sec:authorize="hasRole('ROLE_ADMIN')">
-                  <button class="common_button" id="edit-user" th:data-id="${user.getId()}" type="button" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit user</button>
+                  <button class="common_button" th:data-id="${user.getId()}" type="button" data-bs-toggle="modal" data-bs-target="#editUserModal">Edit user</button>
                   <button th:if="${users.size() > 1 && !user.getUsername().equals(#authentication.getName())}" class="common_button">Delete user</button>
                 </div>
               </form>
@@ -163,7 +163,7 @@
   </script>
   <script>
     $(function() {
-      $(".btn").click(
+      $(".common_button").click(
               function() {
                 let id = $(this).attr('data-id');
                 $("#idUser").attr('value', id);
