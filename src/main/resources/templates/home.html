@@ -234,7 +234,7 @@
                             <div class="collapse" th:aria-labelledby="'collapseEditTemplate'+${stat.index}" th:id="'collapseEditTemplate'+${stat.index}" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR')">
                                 <form enctype="multipart/form-data" th:action="@{'/page/'+${page.getId()}+'/edit_template'}" method="post">
                                     <div class="col-xs-4">
-                                        <input class="form-control" name="name" id="textInput-editTemp"  placeholder="Template name">
+                                        <input class="form-control" name="name" id="textInput-editTemp" required  placeholder="Template name">
                                         <input type="hidden" id="edit_temp_id" name="id" th:value="${template.getId()}">
                                         <input class="common_button" type="submit" value="Rename template">
                                     </div>
